@@ -1,0 +1,3 @@
+from handlers.registration import registration_router
+from handlers.menu import menu_router
+from handlers.profile_sets import profile_sets_router
