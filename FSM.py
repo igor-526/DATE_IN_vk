@@ -2,29 +2,22 @@ from vkwave.bots.fsm import FiniteStateMachine, State
 
 fsm = FiniteStateMachine()
 
-class RegistrationFSM:
-    registration = State('registration')
-    reg_profile = State('reg_profile')
-    reg_name_auto = State('reg_name_auto')
-    reg_name = State('reg_name')
-    reg_age_auto = State('reg_age_auto')
-    reg_age = State('reg_age')
-    reg_sex_f = State('reg_sex_f')
-    reg_sex_auto = State('reg_sex_auto')
-    reg_sex = State('reg_sex')
-    reg_age_min = State('reg_age_min')
-    reg_age_max = State('reg_age_max')
-    reg_city_auto = State('reg_city_auto')
-    reg_city = State('reg_city')
-    reg_purpose = State('reg_purpose')
-    reg_photo = State('reg_photo')
-    reg_description = State('reg_description')
-
 
 class Reg:
     profile = State('profile')
     name_auto = State('name')
     name_manual = State('name_manual')
+    bdate_manual = State('bdate_manual')
+    bdate_auto = State('bdate_auto')
+    bdate_year = State('bdate_year')
+    sex_manual = State('sex_manunal')
+    geo = State('geo')
+    photo = State('photo')
+    description = State('description')
+    purposes = State('purposes')
+    f_sex = State('f_sex')
+    f_age_min = State('f_min_age')
+    f_age_max = State('f_max_age')
 
 
 class MenuFSM:

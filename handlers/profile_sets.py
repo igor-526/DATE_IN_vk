@@ -9,7 +9,7 @@ from FSM import (fsm,
                  MenuFSM)
 from keyboards import (prof_set_keys,
                        menu_keys,
-                       yesno_keys)
+)
 from funcs import gen_profile_settings
 from dbase import del_profile
 

@@ -14,11 +14,9 @@ async def vkuser_info(user_id):
     }
     response = requests.get(url, params=params)
     response = response.json()['response'][0]
-    data = {'name': None, 'city_id': None, 'city_title': None, 'bdate': None, 'sex': None}
+    data = {'name': None, 'bdate': None, 'sex': None}
     data['name'] = response.get('first_name')
-    data['sex'] = response.get('sex')
-    if 'city' in response:
-        data['city_id'] = response.get('city').get('id')
-        data['city_title'] = response.get('city').get('title')
-    if 'bdate' in response: data['age'] = response.get('bdate')
+    if 'sex' in response:
+        data['sex'] = response.get('sex')
+    if 'bdate' in response: data['bdate'] = response.get('bdate')
     return data

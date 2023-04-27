@@ -1,12 +1,23 @@
 from FSM import (fsm,
                  Reg)
-from vkwave.bots import (SimpleBotEvent,
-                         Keyboard)
-from keyboards import (yesno_keys,
-                       yesnoback_keys,
-                       reg_profile_keys)
+from vkwave.bots import SimpleBotEvent
+from keyboards import (yesnoback_keys,
+                       reg_profile_keys,
+                       back_keys,
+                       sex_keys,
+                       geo_keys,
+                       skip_keys,
+                       sexf_keys,
+                       )
 from vkwave.bots.fsm import ForWhat
-from vkapi import (vkuser_info)
+from funcs import gen_purposes
+
+
+async def invalid(event: SimpleBotEvent, keys):
+    await event.answer(message="Я вас не понимаю &#128532;\n" \
+                               "Пожалуйста, выберите действие на клавиатуре",
+                       keyboard=keys)
+
 
 async def start_registration(event: SimpleBotEvent):
     await event.answer(message="Подскажите, у Вас уже есть профиль на сайте или в TG?",
@@ -15,15 +26,128 @@ async def start_registration(event: SimpleBotEvent):
 
 
 async def f_ask_name_auto(event: SimpleBotEvent):
-    data = fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
+    data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
     profile_info = data['vk']
     await event.answer(message=f"Тогда начнём &#128521;\n"
                                f"Тебя зовут {profile_info['name']}?",
-                       keyboard=yesno_keys.get_keyboard())
-    fsm.set_state(state=Reg.name_auto, event=event, for_what=ForWhat.FOR_USER)
+                       keyboard=yesnoback_keys.get_keyboard())
+    await fsm.set_state(state=Reg.name_auto, event=event, for_what=ForWhat.FOR_USER)
 
 
 async def f_ask_name_manual(event: SimpleBotEvent):
-    await event.answer(message=f'Как же тогда тебя зовут? &#128527;',
-                       keyboard=Keyboard.get_empty_keyboard())
-    fsm.set_state(state=Reg.name_manual, event=event, for_what=ForWhat.FOR_USER)
+    await event.answer(message=f'Как же тогда тебя зовут? &#128527;\n'
+                               f'Учти, что имя после регистрации можно будет поменять только 1 раз!',
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.name_manual, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_bdate(event: SimpleBotEvent):
+    data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
+    if not data['vk']['bdate']:
+        await event.answer("Записал &#128521;\n"
+                           "Не вижу твою дату рождения\n"
+                           "Напиши мне её, пожалуйста, в формате 'ДД.ММ.ГГГГ'\n"
+                           "Учти, что после регистрации её можно будет поменять только один раз!",
+                           keyboard=back_keys.get_keyboard())
+        await fsm.set_state(state=Reg.bdate_manual, event=event, for_what=ForWhat.FOR_USER)
+    elif len(data['vk']['bdate'].split('.')) == 2:
+        await event.answer("Записал &#128521;\n"
+                           "Вижу твой день рождения! Но мне нужен ещё и год\n"
+                           "Напиши мне его, пожалуйста, в формате 'ГГГГ'\n"
+                           "Учти, что после регистрации дату рождения можно будет поменять только один раз!",
+                           keyboard=back_keys.get_keyboard())
+        await fsm.set_state(state=Reg.bdate_year, event=event, for_what=ForWhat.FOR_USER)
+    elif len(data['vk']['bdate'].split('.')) == 3:
+        await event.answer(f"Записал &#128521;\n"
+                           f"Вижу твою полную дату рождения - {data['vk']['bdate']}\n"
+                           f"Это же она?",
+                           keyboard=yesnoback_keys.get_keyboard())
+        await fsm.set_state(state=Reg.bdate_auto, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_bdate_manual(event: SimpleBotEvent):
+    await event.answer(message="Тогда напиши мне её, пожалуйста, в формате 'ДД.ММ.ГГГГ'\n"
+                               "Учти, что после регистрации её можно будет поменять только один раз!",
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.bdate_manual, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_sex(event: SimpleBotEvent):
+    data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
+    sex = data['vk']['sex']
+    if sex:
+        await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'sex': data['vk']['sex']})
+        await event.answer(message=f'Записал &#128521;\n'
+                                   f'Надеюсь, твой пол - {"мужской" if sex==2 else "женский"}?\n'
+                                   f'Если это не так, то потом можно будет поменять в настройках\n'
+                                   f'Но только один раз!')
+        await f_reg_geo(event)
+
+    elif not sex:
+        await event.answer(message='Не удалось определить твой пол\n'
+                                   'Помоги, пожалуйста',
+                           keyboard=sex_keys.get_keyboard())
+        await fsm.set_state(state=Reg.sex_manual, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_geo(event: SimpleBotEvent):
+    await event.answer(message='Мне нужно знать твоё местоположение (можно примерное)\n'
+                               'Это для того, чтобы подбирать тебе анкеты поближе',
+                       keyboard=geo_keys.get_keyboard())
+    await fsm.set_state(state=Reg.geo, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_photo(event: SimpleBotEvent):
+    await event.answer(message='Супер! Отправь мне фотографии (до 3 шт., потом можно будет добавить), которые'
+                               'будешь гордо демонстрировать другим пользователям сервиса\n'
+                               'Если хочется пользоваться без фотографий (что мы очень не рекомендуем) или '
+                               'отправить их потом, нажми кнопку "Пропустить"',
+                       keyboard=skip_keys.get_keyboard())
+    await fsm.set_state(state=Reg.photo, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_description(event: SimpleBotEvent):
+    await event.answer(message="Готово! Почти шаг - напиши мне какой-нибудь текст, который заинтересует любого "
+                               "и заставит нажать кнопку лайка!\n"
+                               "Если хочется придумать позже, или вообще не добавлять (что мы так же не рекомендуем!),"
+                               " просто нажми кнопку 'Пропустить'",
+                       keyboard=skip_keys.get_keyboard())
+    await fsm.set_state(state=Reg.description, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_purposes(event: SimpleBotEvent):
+    msg = 'Последний шаг - определиться с целями!\nПожалуйста, через запятую или пробел ' \
+          'перечислите номера целей\n\n'
+    msg += await gen_purposes()
+    await event.answer(message=msg,
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.purposes, event=event, for_what=ForWhat.FOR_USER)
+
+async def f_reg_sexf(event: SimpleBotEvent):
+    await event.answer(message='С твоим профилем всё!\nОсталось определиться с настройками поиска\n'
+                               'Тут гораздо меньше. Детальнее потом можно будет настроить в меню')
+    await event.answer(message='Кого мы будем искать?',
+                       keyboard=sexf_keys.get_keyboard())
+    await fsm.set_state(state=Reg.f_sex, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_age_min(event: SimpleBotEvent):
+    await event.answer(message='С этим определились!\n'
+                               'Осталось понять, какой будет минимальный возраст для поиска',
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.f_age_min, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_age_max(event: SimpleBotEvent):
+    await event.answer(message='Прекрасный выбор!\n'
+                               'А максимальный?',
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.f_age_max, event=event, for_what=ForWhat.FOR_USER)
+
+
+async def f_reg_finish(event: SimpleBotEvent):
+    await event.answer(message='Ура! Регистрация завершена\nВот так выглядит твой профиль:')
+    data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
+    print(data)
+    await event.answer(message=str(data))
+    await fsm.finish(event=event, for_what=ForWhat.FOR_USER)

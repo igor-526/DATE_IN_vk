@@ -5,7 +5,6 @@ from vkwave.bots import (SimpleBotEvent,
                          simple_bot_message_handler,
                          Keyboard)
 from FSM import (fsm,
-                 RegistrationFSM,
                  MenuFSM,
                  ProfileFSM)
 from keyboards import (reg_keys,
@@ -15,6 +14,9 @@ from funcs import gen_profile_settings
 from dbase import chk_reg
 
 menu_router = DefaultRouter()
+
+
+
 
 
 @simple_bot_message_handler(menu_router,
@@ -29,7 +31,6 @@ async def check_reg(event: SimpleBotEvent):
         await event.answer(message="Добро пожаловать в DATE IN!\n"
                                    "Для начала использования нужно зарегистрироваться",
                            keyboard=reg_keys.get_keyboard())
-        await fsm.set_state(event=event, state=RegistrationFSM.registration, for_what=ForWhat.FOR_USER)
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "profile"}),

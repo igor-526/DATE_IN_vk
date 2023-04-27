@@ -1,8 +1,10 @@
 async def gen_purposes():
-    purposes = ['Общение', 'Флирт', 'Cоздание семьи', 'Поразвлекаться', 'Отношения']
-    result = {'len': len(purposes), 'msg': ''}
+    msg = ''
     counter = 1
-    for i in purposes:
-        result['msg'] += f'{counter}. {i}\n'
-        counter += 1
-    return result
+    with open(file='fixtures/purposes.txt', mode='r') as file:
+        purposes = file.readlines()
+        for purpose in purposes:
+            purp = purpose.strip("\n")
+            msg += f'{counter}. {purp}\n'
+            counter += 1
+    return msg
