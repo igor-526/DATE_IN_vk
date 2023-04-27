@@ -6,3 +6,4 @@ from keyboards.sex import sex_keys
 from keyboards.skip import skip_keys
 from keyboards.menu import menu_keys
 from keyboards.profile_settings import prof_set_keys
+from keyboards.yesnoback import yesnoback_keys

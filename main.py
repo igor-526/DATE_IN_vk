@@ -1,11 +1,13 @@
 from bot import bot
-from handlers import (registration_router,
+from handlers import (reg_profile_router,
+                      reg_name_router,
                       profile_sets_router,
                       menu_router)
 from models import db_bind, db_reset
 import asyncio
 
-bot.dispatcher.add_router(registration_router)
+bot.dispatcher.add_router(reg_profile_router)
+bot.dispatcher.add_router(reg_name_router)
 bot.dispatcher.add_router(profile_sets_router)
 bot.dispatcher.add_router(menu_router)
 loop = asyncio.get_event_loop()

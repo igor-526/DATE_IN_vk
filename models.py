@@ -1,5 +1,5 @@
 from gino import Gino
-from sqlalchemy import Column, BigInteger, String, ForeignKey, DateTime, Integer, Float, Date, Boolean, sql
+from sqlalchemy import Column, String, ForeignKey, DateTime, Integer, Date, sql
 import sqlalchemy as sa
 from typing import List
 import config
@@ -26,14 +26,24 @@ class Profile(BaseModel):
     __tablename__ = "profile"
 
     id = Column(Integer, primary_key=True)
-    vk_id = Column(Integer, nullable=True)
-    tg_id = Column(Integer, nullable=True)
+    phone = Column(String, nullable=True, unique=True)
+    vk_id = Column(Integer, nullable=True, unique=True)
+    tg_id = Column(Integer, nullable=True, unique=True)
     name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
+    bdate = Column(Date, nullable=False)
     sex = Column(Integer, nullable=False)
     city_id = Column(Integer, nullable=False)
     city_title = Column(String, nullable=False)
     description = Column(String, nullable=True)
+    status = Column(String, nullable=False)
+
+    query: sql.select
+
+
+class Settings(BaseModel):
+    __tablename__ = "settings"
+
+    id = Column(Integer, primary_key=True)
     age_min = Column(Integer, nullable=False)
     age_max = Column(Integer, nullable=False)
     find_m = Column(Integer, nullable=False)
@@ -43,6 +53,13 @@ class Profile(BaseModel):
     purp3 = Column(Integer, nullable=False)
     purp4 = Column(Integer, nullable=False)
     purp5 = Column(Integer, nullable=False)
+    ch_name = Column(DateTime, nullable=True)
+    ch_sex = Column(DateTime, nullable=True)
+    ch_bdate = Column(DateTime, nullable=True)
+    ch_purposes = Column(DateTime, nullable=True)
+    created = Column(Date, nullable=False)
+    deactivated = Column(DateTime, nullable=True)
+    last_usage = Column(Date, nullable=False)
 
     query: sql.select
 
@@ -54,6 +71,42 @@ class Images(BaseModel):
     profile = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
     description = Column(String, nullable=False)
+
+    query: sql.select
+
+
+class Offerlist(BaseModel):
+    __tablename__ = "offerlist"
+
+    id = Column(Integer, primary_key=True)
+    profile = Column(Integer, nullable=False)
+    offer_id = Column(Integer, nullable=False)
+    status = Column(String, nullable=False)
+
+    query: sql.select
+
+
+class Matchlist(BaseModel):
+    __tablename__ = "matchlist"
+
+    id = Column(Integer, primary_key=True)
+    profile_1 = Column(Integer, nullable=False)
+    profile_2 = Column(Integer, nullable=False)
+
+    query: sql.select
+
+
+class Complaintlist(BaseModel):
+    __tablename__ = "complaintlist"
+
+    id = Column(Integer, primary_key=True)
+    profile = Column(Integer, nullable=False)
+    complain_to = Column(Integer, nullable=True)
+    cat = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    images = Column(String, nullable=True)
+    status = Column(String, nullable=False)
+    date = Column(DateTime, nullable=False)
 
     query: sql.select
 

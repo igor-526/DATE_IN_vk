@@ -20,8 +20,16 @@ class RegistrationFSM:
     reg_photo = State('reg_photo')
     reg_description = State('reg_description')
 
+
+class Reg:
+    profile = State('profile')
+    name_auto = State('name')
+    name_manual = State('name_manual')
+
+
 class MenuFSM:
     menu = State('menu')
+
 
 class ProfileFSM:
     show = State('show')
