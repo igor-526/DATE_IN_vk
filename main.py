@@ -11,7 +11,6 @@ from handlers import (reg_profile_router,
                       reg_sexf_router,
                       reg_age_min_router,
                       reg_age_max_router,
-                      profile_sets_router,
                       reg_sex_router,
                       menu_router)
 
@@ -26,7 +25,6 @@ bot.dispatcher.add_router(reg_purposes_router)
 bot.dispatcher.add_router(reg_sexf_router)
 bot.dispatcher.add_router(reg_age_min_router)
 bot.dispatcher.add_router(reg_age_max_router)
-bot.dispatcher.add_router(profile_sets_router)
 bot.dispatcher.add_router(menu_router)
 
 loop = asyncio.get_event_loop()

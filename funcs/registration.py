@@ -10,7 +10,9 @@ from keyboards import (yesnoback_keys,
                        sexf_keys,
                        )
 from vkwave.bots.fsm import ForWhat
-from funcs import gen_purposes
+from funcs import gen_purposes, generate_profile_forview
+from dbase import add_profile, add_settings, add_profile_photos
+import datetime
 
 
 async def invalid(event: SimpleBotEvent, keys):
@@ -146,8 +148,34 @@ async def f_reg_age_max(event: SimpleBotEvent):
 
 
 async def f_reg_finish(event: SimpleBotEvent):
-    await event.answer(message='Ура! Регистрация завершена\nВот так выглядит твой профиль:')
+
     data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
-    print(data)
-    await event.answer(message=str(data))
+    profile_id = await add_profile(vk_id=event.user_id, name=data['name'],
+                                   bdate=datetime.datetime.strptime(data['bdate'], '%d.%m.%Y'), sex=data['sex'],
+                                   city=data['city'], description=data['description'], geo_lat=data['geo']['latitude'],
+                                   geo_long=data['geo']['longitude'])
+    f_m = f_f = p1 = p2 = p3 = p4 = p5 = 0
+    if 1 in data['sex_f']:
+        f_f = 1
+    if 2 in data['sex_f']:
+        f_m = 1
+    if 1 in data['purposes']:
+        p1 = 1
+    if 2 in data['purposes']:
+        p2 = 1
+    if 3 in data['purposes']:
+        p3 = 1
+    if 4 in data['purposes']:
+        p4 = 1
+    if 5 in data['purposes']:
+        p5 = 1
+    await add_settings(vk_id=event.user_id, age_min=data['age_min'], age_max=data['age_max'], purp1=p1, purp2=p2,
+                       purp3=p3, purp4=p4, purp5=p5, find_f=f_f, find_m=f_m)
+    await add_profile_photos(event.user_id, photos=data['photos'])
+    await event.answer(message='Ура! Регистрация завершена\nВот так выглядит твой профиль:')
+    prof = await generate_profile_forview(profile_id, event.user_id)
+    await event.answer(message=prof['msg1'],
+                       attachment=prof['att1'])
+    await event.answer(message=prof['msg2'],
+                       attachment=prof['att2'])
     await fsm.finish(event=event, for_what=ForWhat.FOR_USER)

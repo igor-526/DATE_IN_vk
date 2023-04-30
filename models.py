@@ -1,5 +1,5 @@
 from gino import Gino
-from sqlalchemy import Column, String, ForeignKey, DateTime, Integer, Date, sql
+from sqlalchemy import Column, String, ForeignKey, DateTime, Integer, Date, sql, Float
 import sqlalchemy as sa
 from typing import List
 import config
@@ -32,8 +32,9 @@ class Profile(BaseModel):
     name = Column(String, nullable=False)
     bdate = Column(Date, nullable=False)
     sex = Column(Integer, nullable=False)
-    city_id = Column(Integer, nullable=False)
-    city_title = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    geo_lat = Column(Float, nullable=False)
+    geo_long = Column(Float, nullable=False)
     description = Column(String, nullable=True)
     status = Column(String, nullable=False)
 
