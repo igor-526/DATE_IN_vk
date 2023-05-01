@@ -11,8 +11,8 @@ async def get_prof_forview(id):
     for photo in photos:
         counter += 1
         if counter == 1:
-            main_photo = photo.url
-        images.append(photo.url)
+            main_photo = photo.url_vk
+        images.append(photo.url_vk)
     purposes = []
     if settings.purp1 == 1:
         purposes.append(1)
@@ -24,7 +24,7 @@ async def get_prof_forview(id):
         purposes.append(4)
     if settings.purp5 == 1:
         purposes.append(5)
-    result = {'id': profile.id, 'name': profile.name, 'city': profile.city, 'age': profile.bdate,
+    result = {'id': profile.id, 'name': profile.name, 'city': profile.city, 'bdate': profile.bdate,
               'description': profile.description, 'main_photo': main_photo, 'other_photos': images,
               'purposes': purposes}
     return result

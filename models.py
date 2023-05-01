@@ -71,6 +71,7 @@ class Images(BaseModel):
     id = Column(Integer, primary_key=True)
     profile = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
+    url_vk = Column(String, nullable=True)
     description = Column(String, nullable=False)
 
     query: sql.select

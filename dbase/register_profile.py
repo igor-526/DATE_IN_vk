@@ -38,5 +38,5 @@ async def add_profile_photos(vk_id: int,
                              photos: list):
     profile = await Profile.query.where(Profile.vk_id == vk_id).gino.first()
     for photo in photos:
-        image = Images(profile=profile.id, url=photo, description='profile_photo')
+        image = Images(profile=profile.id, url=photo["url"], url_vk=photo["vk_url"], description='profile_photo')
         await image.create()

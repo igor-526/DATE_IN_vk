@@ -5,6 +5,7 @@ from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handle
 from FSM import fsm, Reg
 from keyboards import skip_keys
 from funcs import f_reg_description, f_reg_geo
+from vkapi import get_photos_info
 
 reg_photo_router = DefaultRouter()
 
@@ -25,10 +26,7 @@ async def skip(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_photo_router, filters.AttachmentTypeFilter(MessagesMessageAttachmentType.PHOTO),
                             StateFilter(fsm=fsm, state=Reg.photo, for_what=ForWhat.FOR_USER))
 async def getphoto(event: SimpleBotEvent):
-    atts = event.attachments
-    photos = []
-    for photo in atts:
-        photos.append(photo.photo.sizes[-1].url)
+    photos = await get_photos_info(event.object.object.message.id)
     await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'photos': photos})
     await f_reg_description(event)
 
