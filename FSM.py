@@ -24,6 +24,17 @@ class Menu:
     menu = State('menu')
 
 
-class ProfileFSM:
+class Profile:
     show = State('show')
+    name = State('name')
+    bdate = State('bdate')
+    sex = State('sex')
+    purposes = State('purposes')
+    geo = State('geo')
+    description = State('description')
+    del_photos = State('del_photos')
+    add_photos = State('add_photos')
+    age_min = State('age_min')
+    age_max = State('age_max')
+    sex_f = State('sex_f')
     delete = State('delete')

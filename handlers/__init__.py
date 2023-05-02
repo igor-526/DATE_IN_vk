@@ -10,3 +10,4 @@ from handlers.reg.reg_purposes import reg_purposes_router
 from handlers.reg.reg_sexf import reg_sexf_router
 from handlers.reg.reg_age_min import reg_age_min_router
 from handlers.reg.reg_age_max import reg_age_max_router
+from handlers.profile import profile_router
