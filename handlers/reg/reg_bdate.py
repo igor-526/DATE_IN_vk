@@ -73,5 +73,8 @@ async def val_bdate(event: SimpleBotEvent):
         await f_reg_sex(event)
     elif validator == 'invalid':
         await event.answer(message='Не смог ничего сделать с этим сообщением\n'
-                                   'Пожалуйста, введи год своего рождения полностью',
+                                   'Пожалуйста, введи дату рождения в формате ДД.ММ.ГГГГ',
+                           keyboard=back_keys.get_keyboard())
+    elif validator == 'interval':
+        await event.answer(message='У нас ограничение от 14 до 60 лет :(',
                            keyboard=back_keys.get_keyboard())

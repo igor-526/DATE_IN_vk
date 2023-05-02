@@ -60,7 +60,7 @@ class Settings(BaseModel):
     ch_purposes = Column(DateTime, nullable=True)
     created = Column(Date, nullable=False)
     deactivated = Column(DateTime, nullable=True)
-    last_usage = Column(Date, nullable=False)
+    last_usage = Column(DateTime, nullable=False)
 
     query: sql.select
 

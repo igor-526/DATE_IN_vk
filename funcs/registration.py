@@ -11,6 +11,7 @@ from keyboards import (yesnoback_keys,
                        )
 from vkwave.bots.fsm import ForWhat
 from funcs import gen_purposes, generate_profile_forview
+from funcs.send_menu import show_menu
 from dbase import add_profile, add_settings, add_profile_photos
 import datetime
 
@@ -173,9 +174,10 @@ async def f_reg_finish(event: SimpleBotEvent):
                        purp3=p3, purp4=p4, purp5=p5, find_f=f_f, find_m=f_m)
     await add_profile_photos(event.user_id, photos=data['photos'])
     await event.answer(message='Ура! Регистрация завершена\nВот так выглядит твой профиль:')
-    prof = await generate_profile_forview(profile_id, event.user_id)
+    prof = await generate_profile_forview(profile_id, 0)
     await event.answer(message=prof['msg1'],
                        attachment=prof['att1'])
-    await event.answer(message=prof['msg2'],
-                       attachment=prof['att2'])
-    await fsm.finish(event=event, for_what=ForWhat.FOR_USER)
+    if prof['msg2'] or prof['att2']:
+        await event.answer(message=prof['msg2'],
+                           attachment=prof['att2'])
+    await show_menu(event)

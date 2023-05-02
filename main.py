@@ -29,6 +29,6 @@ bot.dispatcher.add_router(menu_router)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(db_bind())
-loop.run_until_complete(db_reset())
+# loop.run_until_complete(db_reset())
 print("All routers added")
 bot.run_forever()

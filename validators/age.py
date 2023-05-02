@@ -8,7 +8,7 @@ async def valid_age(age, min_age):
     if min_age:
         if min_age > age:
             return 'more_min'
-    if age > 99:
+    if age > 60:
         return 'too_old'
     elif 1 <= age < 14:
         return 'too_small'

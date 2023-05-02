@@ -12,7 +12,8 @@ async def get_prof_forview(id):
         counter += 1
         if counter == 1:
             main_photo = photo.url_vk
-        images.append(photo.url_vk)
+        else:
+            images.append(photo.url_vk)
     purposes = []
     if settings.purp1 == 1:
         purposes.append(1)

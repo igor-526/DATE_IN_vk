@@ -20,7 +20,7 @@ class Reg:
     f_age_max = State('f_max_age')
 
 
-class MenuFSM:
+class Menu:
     menu = State('menu')
 
 
