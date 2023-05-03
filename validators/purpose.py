@@ -5,9 +5,11 @@ async def valid_purpose(msg: str):
     for i in msg:
         try:
             i = int(i)
-        except: return 'invalid'
-        if 1<=i<=5:
+        except:
+            return 'invalid'
+        if 1 <= i <= 5:
             if i not in result:
                 result.append(i)
-        else: return 'invalid'
+        else:
+            return 'invalid'
     return result

@@ -8,3 +8,7 @@ from keyboards.profile_settings import prof_set_keys
 from keyboards.yesnoback import yesnoback_keys
 from keyboards.back import back_keys
 from keyboards.geo import geo_keys
+from keyboards.cancel import cancel_keys
+from keyboards.geocancel import geocancel_keys
+from keyboards.yesno import yesno_keys
+from keyboards.return_profile import return_keys

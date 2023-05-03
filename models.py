@@ -57,10 +57,11 @@ class Settings(BaseModel):
     ch_name = Column(DateTime, nullable=True)
     ch_sex = Column(DateTime, nullable=True)
     ch_bdate = Column(DateTime, nullable=True)
-    ch_purposes = Column(DateTime, nullable=True)
     created = Column(Date, nullable=False)
     deactivated = Column(DateTime, nullable=True)
     last_usage = Column(DateTime, nullable=False)
+    offer_kilometrage = Column(Integer, nullable=True)
+    offer_ofset = Column(Integer, nullable=True)
 
     query: sql.select
 

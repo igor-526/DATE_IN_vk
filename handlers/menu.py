@@ -2,10 +2,10 @@ from vkwave.bots.fsm import StateFilter, ForWhat, NO_STATE
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Menu, Profile
-from keyboards import yesnoback_keys, back_keys, reg_keys, prof_set_keys
-from validators import valid_bdate, valid_year
-from dbase import chk_reg
-from funcs import start_registration, show_menu, generate_profile_forsettings
+from keyboards import reg_keys, prof_set_keys, return_keys
+from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile
+from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo
+import datetime
 
 menu_router = DefaultRouter()
 
@@ -16,17 +16,51 @@ async def reg(event: SimpleBotEvent):
     await start_registration(event)
 
 
+@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "return"}),
+                            StateFilter(fsm=fsm, state=NO_STATE, for_what=ForWhat.FOR_USER))
+async def ret_profile(event: SimpleBotEvent):
+    await upd_activate_profile(event.user_id)
+    await event.answer(message='Профиль успешно восстановлен!')
+    await show_menu(event)
+
+
 @simple_bot_message_handler(menu_router,
                             StateFilter(fsm=fsm, state=NO_STATE, for_what=ForWhat.FOR_USER))
 async def start(event: SimpleBotEvent):
     check = await chk_reg(event.user_id)
     if check:
-        await event.answer(message=f"Добро пожаловать, {check.name}")
-        await show_menu(event)
+        if check.status == 'active':
+            await event.answer(message=f"Добро пожаловать, {check.name}")
+            await show_menu(event)
+        elif check.status == 'deactivated':
+            datesinfo = await dates_info(event.user_id)
+            if datesinfo['deactivated'] > datetime.datetime.now()-datetime.timedelta(days=7):
+                await event.answer(message=f'Добро пожаловать, {check.name}\n'
+                                           f'Твой профиль будет удалён '
+                                           f'{datesinfo["deactivated"]+datetime.timedelta(days=7)}\n'
+                                           f'Хочешь восстановить профиль сейчас?',
+                                   keyboard=return_keys.get_keyboard())
+            else:
+                await upd_delete_profile(event.user_id)
+                await event.answer(message="Добро пожаловать в DATE IN!\n"
+                                           "Для начала использования необходимо зарегистрироваться",
+                                   keyboard=reg_keys.get_keyboard())
     else:
         await event.answer(message="Добро пожаловать в DATE IN!\n"
                                    "Для начала использования необходимо зарегистрироваться",
                            keyboard=reg_keys.get_keyboard())
+
+
+@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "start"}),
+                            StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
+async def start(event: SimpleBotEvent):
+    await event.answer(message="Пока что функционал не разработан")
+
+
+@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "upd_geo"}),
+                            StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
+async def upd_geo(event: SimpleBotEvent):
+    await f_ch_geo(event)
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "profile"}),
@@ -39,3 +73,9 @@ async def profile(event: SimpleBotEvent):
     await event.answer(message=prof['msg2'],
                        attachment=prof['att2'])
     await fsm.set_state(state=Profile.show, event=event, for_what=ForWhat.FOR_USER)
+
+
+@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "complaint"}),
+                            StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
+async def start(event: SimpleBotEvent):
+    await event.answer(message="Пока что функционал не разработан")
