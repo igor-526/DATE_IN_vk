@@ -18,6 +18,7 @@ class Reg:
     f_sex = State('f_sex')
     f_age_min = State('f_min_age')
     f_age_max = State('f_max_age')
+    tg_id = State('tg_id')
 
 
 class Menu:

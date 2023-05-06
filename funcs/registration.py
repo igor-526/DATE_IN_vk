@@ -95,7 +95,7 @@ async def f_reg_sex(event: SimpleBotEvent):
 
 async def f_reg_geo(event: SimpleBotEvent):
     await event.answer(message='Мне нужно знать твоё местоположение (можно примерное)\n'
-                               'Это для того, чтобы подбирать тебе анкеты поближе',
+                               'Это необходимо для того, чтобы подбирать тебе анкеты поближе',
                        keyboard=geo_keys.get_keyboard())
     await fsm.set_state(state=Reg.geo, event=event, for_what=ForWhat.FOR_USER)
 
@@ -110,7 +110,7 @@ async def f_reg_photo(event: SimpleBotEvent):
 
 
 async def f_reg_description(event: SimpleBotEvent):
-    await event.answer(message="Готово! Почти шаг - напиши мне какой-нибудь текст, который заинтересует любого "
+    await event.answer(message="Готово! Почти последний шаг - напиши мне какой-нибудь текст, который заинтересует любого "
                                "и заставит нажать кнопку лайка!\n"
                                "Если хочется придумать позже, или вообще не добавлять (что мы так же не рекомендуем!),"
                                " просто нажми кнопку 'Пропустить'",

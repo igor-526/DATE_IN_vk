@@ -22,3 +22,4 @@ from handlers.profile_settings.prs_photos import prs_photos_router
 from handlers.profile_settings.prs_sex_f import prs_sex_f_router
 from handlers.profile_settings.prs_age_f import prs_age_f_router
 from handlers.profile_settings.prs_deactivate import prs_deactivate_router
+from handlers.reg.reg_tg_id import reg_tg_id_router

@@ -1,6 +1,5 @@
 import requests
 from config import bot_token
-import datetime
 
 
 async def vkuser_info(user_id):

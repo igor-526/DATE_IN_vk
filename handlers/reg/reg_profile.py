@@ -2,7 +2,7 @@ from vkwave.bots.fsm import StateFilter, NO_STATE, ForWhat, ANY_STATE
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Reg
-from keyboards import reg_profile_keys
+from keyboards import reg_profile_keys, back_keys
 from vkapi import vkuser_info
 from funcs import start_registration, invalid, f_ask_name_auto
 
@@ -33,7 +33,10 @@ async def no_profile(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_profile_router, filters.PayloadFilter({"command": "tg"}),
                             StateFilter(fsm=fsm, state=Reg.profile, for_what=ForWhat.FOR_USER))
 async def telegram(event: SimpleBotEvent):
-    await invalid(event, reg_profile_keys.get_keyboard())
+    await event.answer(message="Пожалуйста, напиши мне id своего профиля\n"
+                               "Узнать его можно в настройках профиля",
+                       keyboard=back_keys.get_keyboard())
+    await fsm.set_state(state=Reg.tg_id, event=event, for_what=ForWhat.FOR_USER)
 
 
 @simple_bot_message_handler(reg_profile_router, filters.PayloadFilter({"command": "site"}),
