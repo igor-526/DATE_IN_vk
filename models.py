@@ -1,5 +1,5 @@
 from gino import Gino
-from sqlalchemy import Column, String, DateTime, Integer, Date, sql, Float
+from sqlalchemy import Column, String, ForeignKey, DateTime, Integer, Date, sql, Float
 import sqlalchemy as sa
 from typing import List
 import config
@@ -23,7 +23,7 @@ class BaseModel(db.Model):
 
 
 class Profile(BaseModel):
-    __tablename__ = "profile"
+    __tablename__ = "api_profile"
 
     id = Column(Integer, primary_key=True)
     phone = Column(String, nullable=True, unique=True)
@@ -44,9 +44,9 @@ class Profile(BaseModel):
 
 
 class Settings(BaseModel):
-    __tablename__ = "settings"
+    __tablename__ = "api_settings"
 
-    id = Column(Integer, primary_key=True)
+    profile_id = Column(Integer, ForeignKey("api_profile.id"), primary_key=True)
     age_min = Column(Integer, nullable=False)
     age_max = Column(Integer, nullable=False)
     find_m = Column(Integer, nullable=False)
@@ -69,50 +69,51 @@ class Settings(BaseModel):
 
 
 class Images(BaseModel):
-    __tablename__ = "images"
+    __tablename__ = "api_images"
 
     id = Column(Integer, primary_key=True)
-    profile = Column(Integer, nullable=False)
-    url = Column(String, nullable=False)
+    url = Column(String, nullable=True)
     url_vk = Column(String, nullable=True)
     tg_id = Column(String, nullable=True)
     description = Column(String, nullable=False)
+    profile_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
 
     query: sql.select
 
 
 class Offerlist(BaseModel):
-    __tablename__ = "offerlist"
+    __tablename__ = "api_offerlist"
 
     id = Column(Integer, primary_key=True)
-    profile = Column(Integer, nullable=False)
-    offer_id = Column(Integer, nullable=False)
     status = Column(String, nullable=False)
+    offer_id_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
+    profile_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
 
     query: sql.select
 
 
 class Matchlist(BaseModel):
-    __tablename__ = "matchlist"
+    __tablename__ = "api_matchlist"
 
     id = Column(Integer, primary_key=True)
-    profile_1 = Column(Integer, nullable=False)
-    profile_2 = Column(Integer, nullable=False)
+    profile_1_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
+    profile_2_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
+    date = Column(Date, nullable=False)
 
     query: sql.select
 
 
 class Complaintlist(BaseModel):
-    __tablename__ = "complaintlist"
+    __tablename__ = "api_complaintlist"
 
     id = Column(Integer, primary_key=True)
-    profile = Column(Integer, nullable=False)
-    complain_to = Column(Integer, nullable=True)
     cat = Column(String, nullable=False)
     description = Column(String, nullable=True)
     images = Column(String, nullable=True)
     status = Column(String, nullable=False)
     date = Column(DateTime, nullable=False)
+    complain_to_id = Column(Integer, ForeignKey("api_profile.id"), nullable=True)
+    profile_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
 
     query: sql.select
 
@@ -120,9 +121,3 @@ class Complaintlist(BaseModel):
 async def db_bind():
     await db.set_bind(config.POSTGRES_URI)
     print("Connected to Database")
-
-
-async def db_reset():
-    await db.gino.drop_all()
-    await db.gino.create_all()
-    print('Reseted')

@@ -3,8 +3,8 @@ from models import Profile, Settings, Images
 
 async def get_prof_forview(id):
     profile = await Profile.query.where(Profile.id == id).gino.first()
-    settings = await Settings.query.where(Profile.id == id).gino.first()
-    photos = await Images.query.where(Images.profile == id).where(Images.description == 'profile_photo').gino.all()
+    settings = await Settings.query.where(Settings.profile_id == id).gino.first()
+    photos = await Images.query.where(Images.profile_id == id).where(Images.description == 'profile_photo').gino.all()
     counter = 0
     images = []
     main_photo = None
@@ -33,8 +33,8 @@ async def get_prof_forview(id):
 
 async def get_prof_forsetting(vk_id):
     profile = await Profile.query.where(Profile.vk_id == vk_id).gino.first()
-    settings = await Settings.query.where(Profile.id == profile.id).gino.first()
-    photos = await Images.query.where(Images.profile == profile.id).where(Images.description == 'profile_photo').gino.all()
+    settings = await Settings.query.where(Settings.profile_id == profile.id).gino.first()
+    photos = await Images.query.where(Images.profile_id == profile.id).where(Images.description == 'profile_photo').gino.all()
     counter = 0
     images = []
     main_photo = None

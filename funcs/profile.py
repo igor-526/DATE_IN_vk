@@ -26,7 +26,7 @@ async def generate_profile_forsettings(vk_id):
         findsex = 'только девушек'
     elif profile["find_m"] == 1:
         findsex = 'только мужчин'
-    msg1 = f'&#127380;{profile["id"]}' \
+    msg1 = f'&#127380;{profile["id"]}\n' \
            f'Имя: {profile["name"]}\n' \
            f'Дата рождения: {profile["bdate"]}\n' \
            f'Город: {profile["city"]}\n' \

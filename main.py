@@ -1,5 +1,5 @@
 from bot import bot
-from models import db_bind, db_reset
+from models import db_bind
 import asyncio
 from handlers import (reg_profile_router,
                       reg_name_router,
@@ -55,6 +55,5 @@ bot.dispatcher.add_router(reg_tg_id_router)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(db_bind())
-# loop.run_until_complete(db_reset())
 print("All routers added")
 bot.run_forever()
