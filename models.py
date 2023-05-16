@@ -86,8 +86,10 @@ class Offerlist(BaseModel):
 
     id = Column(Integer, primary_key=True)
     status = Column(String, nullable=False)
-    offer_id_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
+    offer_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
     profile_id = Column(Integer, ForeignKey("api_profile.id"), nullable=False)
+    dist = Column(Integer, nullable=False)
+    date = Column(Date, nullable=False)
 
     query: sql.select
 

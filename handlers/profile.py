@@ -2,6 +2,7 @@ from vkwave.bots.fsm import StateFilter, ForWhat, NO_STATE
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Profile
+from dbase import get_profile_id, clean_offerlist
 from funcs import (show_menu,
                    f_ch_name,
                    f_ch_bdate,
@@ -21,6 +22,8 @@ profile_router = DefaultRouter()
 @simple_bot_message_handler(profile_router, filters.PayloadFilter({"command": "menu"}),
                             StateFilter(fsm=fsm, state=Profile.show, for_what=ForWhat.FOR_USER))
 async def go_menu(event: SimpleBotEvent):
+    pr_id = await get_profile_id(event.user_id)
+    await clean_offerlist(pr_id)
     await show_menu(event)
 
 

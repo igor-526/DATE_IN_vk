@@ -1,10 +1,10 @@
 from vkwave.bots.fsm import StateFilter, ForWhat, NO_STATE
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
-from FSM import fsm, Menu, Profile
-from keyboards import reg_keys, prof_set_keys, return_keys
+from FSM import fsm, Menu, Profile, Search
+from keyboards import reg_keys, prof_set_keys, return_keys, search_keys
 from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile
-from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo
+from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search
 import datetime
 
 menu_router = DefaultRouter()
@@ -53,8 +53,11 @@ async def start(event: SimpleBotEvent):
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "start"}),
                             StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
-async def start(event: SimpleBotEvent):
-    await event.answer(message="Пока что функционал не разработан")
+async def start_search(event: SimpleBotEvent):
+    await fsm.set_state(state=Search.searching, for_what=ForWhat.FOR_USER, event=event)
+    await event.answer(message="Уже ищу..",
+                       keyboard=search_keys.get_keyboard())
+    await search(event)
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "upd_geo"}),

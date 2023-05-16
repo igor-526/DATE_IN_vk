@@ -19,6 +19,8 @@ class Reg:
     f_age_min = State('f_min_age')
     f_age_max = State('f_max_age')
     tg_id = State('tg_id')
+    tg_confirm = State('tg_confirm')
+    tg_code = State('tg_code')
 
 
 class Menu:
@@ -39,3 +41,7 @@ class Profile:
     age_max = State('age_max')
     sex_f = State('sex_f')
     delete = State('delete')
+
+
+class Search:
+    searching = State('searching')

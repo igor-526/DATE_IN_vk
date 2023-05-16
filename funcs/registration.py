@@ -8,12 +8,15 @@ from keyboards import (yesnoback_keys,
                        geo_keys,
                        skip_keys,
                        sexf_keys,
-                       )
+                       code_keys)
 from vkwave.bots.fsm import ForWhat
 from funcs import gen_purposes, generate_profile_forview
 from funcs.send_menu import show_menu
 from dbase import add_profile, add_settings, add_profile_photos
 import datetime
+from aiogram import Bot
+from config import tg_bot_token
+from random import randint
 
 
 async def invalid(event: SimpleBotEvent, keys):
@@ -126,6 +129,7 @@ async def f_reg_purposes(event: SimpleBotEvent):
                        keyboard=back_keys.get_keyboard())
     await fsm.set_state(state=Reg.purposes, event=event, for_what=ForWhat.FOR_USER)
 
+
 async def f_reg_sexf(event: SimpleBotEvent):
     await event.answer(message='С твоим профилем всё!\nОсталось определиться с настройками поиска\n'
                                'Тут гораздо меньше. Детальнее потом можно будет настроить в меню')
@@ -181,3 +185,13 @@ async def f_reg_finish(event: SimpleBotEvent):
         await event.answer(message=prof['msg2'],
                            attachment=prof['att2'])
     await show_menu(event)
+
+
+async def send_code(event: SimpleBotEvent, tg_id):
+    bot = Bot(token=tg_bot_token)
+    code = randint(10000, 99999)
+    await bot.send_message(chat_id=tg_id, text=f'Код для входа в DATE IN в ВК: {code}')
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'code': code})
+    await event.answer(message='Отправил тебе в telegram пятизначный код. Отправь мне его',
+                       keyboard=code_keys.get_keyboard())
+    await fsm.set_state(state=Reg.tg_code, event=event, for_what=ForWhat.FOR_USER)

@@ -4,6 +4,7 @@ from vkwave.bots import SimpleBotEvent
 from keyboards import menu_keys
 from vkwave.bots.fsm import ForWhat
 
+
 async def show_menu(event: SimpleBotEvent):
     await event.answer(message="Выберите действие:",
                        keyboard=menu_keys.get_keyboard())
