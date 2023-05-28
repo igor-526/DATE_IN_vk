@@ -1,10 +1,9 @@
-from FSM import (fsm,
-                 Reg)
+from FSM import fsm
 from vkwave.bots import SimpleBotEvent
 from vkwave.bots.fsm import ForWhat
 from funcs import generate_profile_forview, show_menu
 from dbase import get_profile_id, get_search_profile
-from pprint import pprint
+from keyboards import search_in_keys
 
 
 async def search(event: SimpleBotEvent):
@@ -13,12 +12,9 @@ async def search(event: SimpleBotEvent):
     if offer != 'no_profiles':
         await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'id': pr_id, 'offer': offer['id']})
         prof = await generate_profile_forview(offer['id'], offer['dist'])
-        pprint(prof)
         await event.answer(message=prof['msg1'],
-                           attachment=prof['att1'])
-        if prof['msg2'] or prof['att2']:
-            await event.answer(message=prof['msg2'],
-                               attachment=prof['att2'])
+                           attachment=prof['att1'],
+                           keyboard=search_in_keys.get_keyboard())
     else:
         await event.answer(message="Никого не нашли для тебя\n"
                                    "Не расстраивайся, попробуй поменять настройки поиска")

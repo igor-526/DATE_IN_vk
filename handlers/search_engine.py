@@ -1,6 +1,8 @@
 from vkwave.bots.fsm import StateFilter, ForWhat
 from vkwave.bots.core.dispatching import filters
-from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
+from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler, simple_bot_handler
+from vkwave.types.bot_events import BotEventType
+from bot import bot
 from FSM import fsm, Search
 from keyboards import search_keys
 from funcs import search, show_menu, invalid
@@ -25,10 +27,18 @@ async def pass_profile(event: SimpleBotEvent):
     await search(event)
 
 
+
+
 @simple_bot_message_handler(search_engine_router, filters.PayloadFilter({"command": "menu"}),
                             StateFilter(fsm=fsm, state=Search.searching, for_what=ForWhat.FOR_USER))
 async def go_menu(event: SimpleBotEvent):
     await show_menu(event)
+
+
+@simple_bot_handler(search_engine_router, filters.EventTypeFilter("message_event"),
+                    StateFilter(fsm=fsm, state=Search.searching, for_what=ForWhat.FOR_USER))
+async def bbb(event: SimpleBotEvent):
+    print(event)
 
 
 @simple_bot_message_handler(search_engine_router,

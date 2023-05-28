@@ -6,6 +6,7 @@ from keyboards import reg_keys, prof_set_keys, return_keys, search_keys
 from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile
 from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search
 import datetime
+import pytz
 
 menu_router = DefaultRouter()
 
@@ -34,7 +35,7 @@ async def start(event: SimpleBotEvent):
             await show_menu(event)
         elif check.status == 'deactivated':
             datesinfo = await dates_info(event.user_id)
-            if datesinfo['deactivated'] > datetime.datetime.now()-datetime.timedelta(days=7):
+            if datesinfo['deactivated'] > datetime.datetime.now().replace(tzinfo=pytz.utc)-datetime.timedelta(days=7):
                 await event.answer(message=f'Добро пожаловать, {check.name}\n'
                                            f'Твой профиль будет удалён '
                                            f'{datesinfo["deactivated"]+datetime.timedelta(days=7)}\n'

@@ -22,7 +22,7 @@ from random import randint
 async def invalid(event: SimpleBotEvent, keys):
     await event.answer(message="Я вас не понимаю &#128532;\n" \
                                "Пожалуйста, выберите действие на клавиатуре",
-                       keyboard=keys)
+                       keyboard=keys.get_keyboard())
 
 
 async def start_registration(event: SimpleBotEvent):
