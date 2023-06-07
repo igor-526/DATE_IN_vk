@@ -3,7 +3,7 @@ from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Menu, Profile, Search
 from keyboards import reg_keys, prof_set_keys, return_keys, search_keys
-from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile
+from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile, get_profile_id
 from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search
 import datetime
 
@@ -14,6 +14,7 @@ menu_router = DefaultRouter()
                             StateFilter(fsm=fsm, state=NO_STATE, for_what=ForWhat.FOR_USER))
 async def reg(event: SimpleBotEvent):
     await start_registration(event)
+    await event
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "return"}),
@@ -57,6 +58,8 @@ async def start_search(event: SimpleBotEvent):
     await fsm.set_state(state=Search.searching, for_what=ForWhat.FOR_USER, event=event)
     await event.answer(message="Уже ищу..",
                        keyboard=search_keys.get_keyboard())
+    pr_id = await get_profile_id(event.user_id)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
     await search(event)
 
 

@@ -41,6 +41,7 @@ class Profile:
     age_max = State('age_max')
     sex_f = State('sex_f')
     delete = State('delete')
+    desc_more = State('desc_more')
 
 
 class Search:

@@ -20,13 +20,16 @@ from random import randint
 
 
 async def invalid(event: SimpleBotEvent, keys):
-    await event.answer(message="Я вас не понимаю &#128532;\n" \
-                               "Пожалуйста, выберите действие на клавиатуре",
-                       keyboard=keys)
+    await event.answer(message="Я не понимаю &#128532;\n" \
+                               "Пожалуйста, выбери действие на клавиатуре",
+                       keyboard=keys.get_keyboard())
 
 
 async def start_registration(event: SimpleBotEvent):
-    await event.answer(message="Подскажите, у Вас уже есть профиль на сайте или в TG?",
+    await event.answer(message="\U00002757 ВНИМАНИЕ \U00002757 \n"
+                               "Продолжая регистрацию, ты даёшь своё согласие на обработку персональных данных\n"
+                               "Ознакомиться с ней можно здесь datein.ru/privacy")
+    await event.answer(message="Подскажи, ты используешь DATE IN в Telegram?",
                        keyboard=reg_profile_keys.get_keyboard())
     await fsm.set_state(event=event, state=Reg.profile, for_what=ForWhat.FOR_USER)
 
@@ -53,14 +56,14 @@ async def f_reg_bdate(event: SimpleBotEvent):
         await event.answer("Записал &#128521;\n"
                            "Не вижу твою дату рождения\n"
                            "Напиши мне её, пожалуйста, в формате 'ДД.ММ.ГГГГ'\n"
-                           "Учти, что после регистрации её можно будет поменять только один раз!",
+                           "Я её никому не покажу. Только возраст и знак зодиака!",
                            keyboard=back_keys.get_keyboard())
         await fsm.set_state(state=Reg.bdate_manual, event=event, for_what=ForWhat.FOR_USER)
     elif len(data['vk']['bdate'].split('.')) == 2:
         await event.answer("Записал &#128521;\n"
                            "Вижу твой день рождения! Но мне нужен ещё и год\n"
                            "Напиши мне его, пожалуйста, в формате 'ГГГГ'\n"
-                           "Учти, что после регистрации дату рождения можно будет поменять только один раз!",
+                           "Я её никому не покажу. Только возраст и знак зодиака!",
                            keyboard=back_keys.get_keyboard())
         await fsm.set_state(state=Reg.bdate_year, event=event, for_what=ForWhat.FOR_USER)
     elif len(data['vk']['bdate'].split('.')) == 3:
@@ -84,7 +87,7 @@ async def f_reg_sex(event: SimpleBotEvent):
     if sex:
         await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'sex': data['vk']['sex']})
         await event.answer(message=f'Записал &#128521;\n'
-                                   f'Надеюсь, твой пол - {"мужской" if sex==2 else "женский"}?\n'
+                                   f'Ты же {"парень" if sex==2 else "девушка"}?\n'
                                    f'Если это не так, то потом можно будет поменять в настройках\n'
                                    f'Но только один раз!')
         await f_reg_geo(event)
@@ -113,8 +116,8 @@ async def f_reg_photo(event: SimpleBotEvent):
 
 
 async def f_reg_description(event: SimpleBotEvent):
-    await event.answer(message="Готово! Почти последний шаг - напиши мне какой-нибудь текст, который заинтересует любого "
-                               "и заставит нажать кнопку лайка!\n"
+    await event.answer(message="Отлично! Почти последний шаг - напиши мне какой-нибудь текст, который заинтересует "
+                               "любого и заставит нажать кнопку лайка!\n"
                                "Если хочется придумать позже, или вообще не добавлять (что мы так же не рекомендуем!),"
                                " просто нажми кнопку 'Пропустить'",
                        keyboard=skip_keys.get_keyboard())
@@ -131,8 +134,8 @@ async def f_reg_purposes(event: SimpleBotEvent):
 
 
 async def f_reg_sexf(event: SimpleBotEvent):
-    await event.answer(message='С твоим профилем всё!\nОсталось определиться с настройками поиска\n'
-                               'Тут гораздо меньше. Детальнее потом можно будет настроить в меню')
+    await event.answer(message='С твоим профилем закончили!\nДавай теперь настроим поиск\n'
+                               'Тут гораздо меньше')
     await event.answer(message='Кого мы будем искать?',
                        keyboard=sexf_keys.get_keyboard())
     await fsm.set_state(state=Reg.f_sex, event=event, for_what=ForWhat.FOR_USER)
@@ -153,9 +156,9 @@ async def f_reg_age_max(event: SimpleBotEvent):
 
 
 async def f_reg_finish(event: SimpleBotEvent):
-
+    await event.answer("Завершение регистрации")
     data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
-    profile_id = await add_profile(vk_id=event.user_id, name=data['name'],
+    pr_id = await add_profile(vk_id=event.user_id, name=data['name'],
                                    bdate=datetime.datetime.strptime(data['bdate'], '%d.%m.%Y'), sex=data['sex'],
                                    city=data['city'], description=data['description'], geo_lat=data['geo']['latitude'],
                                    geo_long=data['geo']['longitude'])
@@ -174,16 +177,11 @@ async def f_reg_finish(event: SimpleBotEvent):
         p4 = 1
     if 5 in data['purposes']:
         p5 = 1
-    await add_settings(vk_id=event.user_id, age_min=data['age_min'], age_max=data['age_max'], purp1=p1, purp2=p2,
+    await add_settings(pr_id, age_min=data['age_min'], age_max=data['age_max'], purp1=p1, purp2=p2,
                        purp3=p3, purp4=p4, purp5=p5, find_f=f_f, find_m=f_m)
-    await add_profile_photos(event.user_id, photos=data['photos'])
-    await event.answer(message='Ура! Регистрация завершена\nВот так выглядит твой профиль:')
-    prof = await generate_profile_forview(profile_id, 0)
-    await event.answer(message=prof['msg1'],
-                       attachment=prof['att1'])
-    if prof['msg2'] or prof['att2']:
-        await event.answer(message=prof['msg2'],
-                           attachment=prof['att2'])
+    await add_profile_photos(pr_id, photos=data['photos'])
+    await event.answer(message="Ура! Всё получилось!\n"
+                               "Ты также можешь добавить следующие данные о себе:")
     await show_menu(event)
 
 

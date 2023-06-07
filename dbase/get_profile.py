@@ -1,19 +1,11 @@
 from models import Profile, Settings, Images
 
 
-async def get_prof_forview(id):
-    profile = await Profile.query.where(Profile.id == id).gino.first()
-    settings = await Settings.query.where(Settings.profile_id == id).gino.first()
-    photos = await Images.query.where(Images.profile_id == id).where(Images.description == 'profile_photo').gino.all()
-    counter = 0
-    images = []
-    main_photo = None
-    for photo in photos:
-        counter += 1
-        if counter == 1:
-            main_photo = photo.url_vk
-        else:
-            images.append(photo.url_vk)
+async def get_prof_forview(pr_id):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    settings = await Settings.query.where(Settings.profile_id == pr_id).gino.first()
+    photo = await Images.query.where(Images.profile_id == pr_id).where(Images.description == 'profile_photo').gino.first()
+    main_photo = photo.url_vk
     purposes = []
     if settings.purp1 == 1:
         purposes.append(1)
@@ -26,8 +18,7 @@ async def get_prof_forview(id):
     if settings.purp5 == 1:
         purposes.append(5)
     result = {'id': profile.id, 'name': profile.name, 'city': profile.city, 'bdate': profile.bdate,
-              'description': profile.description, 'main_photo': main_photo, 'other_photos': images,
-              'purposes': purposes}
+              'main_photo': main_photo, 'purposes': purposes}
     return result
 
 
@@ -59,4 +50,21 @@ async def get_prof_forsetting(vk_id):
               'description': profile.description, 'main_photo': main_photo, 'other_photos': images,
               'purposes': purposes, 'sex': profile.sex, 'age_min': settings.age_min, 'age_max': settings.age_max,
               'find_m': settings.find_m, 'find_f': settings.find_f}
+    return result
+
+
+async def get_photos(pr_id):
+    photos = await Images.query.where(Images.profile_id == pr_id).where(
+        Images.description == 'profile_photo').gino.all()
+    result = []
+    for photo in photos:
+        result.append(photo.url_vk)
+    return result[1:]
+
+
+async def get_description(pr_id):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    result = {'description': profile.description, 'height': profile.height, 'habits': profile.habits,
+              'children': profile.children, 'busy': profile.busy, 'hobby': profile.hobby, 'animals': profile.animals,
+              'bdate': profile.bdate}
     return result
