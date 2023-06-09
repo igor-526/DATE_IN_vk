@@ -5,7 +5,7 @@ async def get_prof_forview(pr_id):
     profile = await Profile.query.where(Profile.id == pr_id).gino.first()
     settings = await Settings.query.where(Settings.profile_id == pr_id).gino.first()
     photo = await Images.query.where(Images.profile_id == pr_id).where(Images.description == 'profile_photo').gino.first()
-    main_photo = photo.url_vk
+    main_photo = photo.url_vk if photo else None
     purposes = []
     if settings.purp1 == 1:
         purposes.append(1)
@@ -17,8 +17,10 @@ async def get_prof_forview(pr_id):
         purposes.append(4)
     if settings.purp5 == 1:
         purposes.append(5)
+    cont_vk = f'https://vk.com/id{profile.vk_id}' if profile.vk_id else None
+    cont_tg = f'https://t.me/{profile.tg_nick}' if profile.tg_nick else None
     result = {'id': profile.id, 'name': profile.name, 'city': profile.city, 'bdate': profile.bdate,
-              'main_photo': main_photo, 'purposes': purposes}
+              'main_photo': main_photo, 'purposes': purposes, 'cont_vk': cont_vk, 'cont_tg': cont_tg}
     return result
 
 

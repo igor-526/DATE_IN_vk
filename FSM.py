@@ -46,3 +46,14 @@ class Profile:
 
 class Search:
     searching = State('searching')
+
+
+class Matches:
+    new_matches = State('new_matches')
+    old_matches = State('old_matches')
+
+
+class Complaints:
+    category = State('category')
+    description = State('description')
+    confirm = State('confirm')

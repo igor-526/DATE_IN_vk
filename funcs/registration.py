@@ -10,7 +10,7 @@ from keyboards import (yesnoback_keys,
                        sexf_keys,
                        code_keys)
 from vkwave.bots.fsm import ForWhat
-from funcs import gen_purposes, generate_profile_forview
+from funcs import gen_purposes
 from funcs.send_menu import show_menu
 from dbase import add_profile, add_settings, add_profile_photos
 import datetime

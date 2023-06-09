@@ -2,10 +2,11 @@ from vkwave.bots.fsm import StateFilter, ForWhat, NO_STATE
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Menu, Profile, Search
-from keyboards import reg_keys, prof_set_keys, return_keys, search_keys
+from keyboards import reg_keys, prof_set_keys, return_keys, search_keys, newmatch_keys
 from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile, get_profile_id
-from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search
+from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search, show_new_match
 import datetime
+import pytz
 
 menu_router = DefaultRouter()
 
@@ -14,7 +15,6 @@ menu_router = DefaultRouter()
                             StateFilter(fsm=fsm, state=NO_STATE, for_what=ForWhat.FOR_USER))
 async def reg(event: SimpleBotEvent):
     await start_registration(event)
-    await event
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "return"}),
@@ -35,7 +35,7 @@ async def start(event: SimpleBotEvent):
             await show_menu(event)
         elif check.status == 'deactivated':
             datesinfo = await dates_info(event.user_id)
-            if datesinfo['deactivated'] > datetime.datetime.now()-datetime.timedelta(days=7):
+            if datesinfo['deactivated'] > datetime.datetime.now().replace(tzinfo=pytz.utc)-datetime.timedelta(days=7):
                 await event.answer(message=f'Добро пожаловать, {check.name}\n'
                                            f'Твой профиль будет удалён '
                                            f'{datesinfo["deactivated"]+datetime.timedelta(days=7)}\n'
@@ -81,7 +81,11 @@ async def profile(event: SimpleBotEvent):
     await fsm.set_state(state=Profile.show, event=event, for_what=ForWhat.FOR_USER)
 
 
-@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "complaint"}),
+@simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "matches"}),
                             StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
-async def start(event: SimpleBotEvent):
-    await event.answer(message="Пока что функционал не разработан")
+async def matches(event: SimpleBotEvent):
+    pr_id = await get_profile_id(event.user_id)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
+    await event.answer(message="Секунду..",
+                       keyboard=newmatch_keys.get_keyboard())
+    await show_new_match(event)

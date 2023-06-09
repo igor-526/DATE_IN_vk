@@ -4,7 +4,6 @@ from vkwave.bots.fsm import ForWhat
 from funcs import generate_profile_forview, show_menu
 from dbase import get_search_profile
 from keyboards import searchin_keys
-from pprint import pprint
 
 
 async def search(event: SimpleBotEvent):

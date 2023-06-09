@@ -24,3 +24,4 @@ from handlers.profile_settings.prs_age_f import prs_age_f_router
 from handlers.profile_settings.prs_deactivate import prs_deactivate_router
 from handlers.reg.reg_tg_id import reg_tg_id_router
 from handlers.search_engine import search_engine_router
+from handlers.match_engine import match_engine_router

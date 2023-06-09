@@ -3,17 +3,20 @@ from funcs.bdate_to_info import get_bdate_info
 from funcs.purposes import get_purposes_from_list
 
 
-async def generate_profile_forview(id, dist):
+async def generate_profile_forview(id, dist=None):
     profile = await get_prof_forview(id)
     bdate_info = await get_bdate_info(profile["bdate"])
-    msg = f'{profile["name"]}, {bdate_info["age"]} (&#127380;{profile["id"]})\n' \
-           f'{dist} км от тебя\n' \
-           f'{profile["city"]}\n\nЦели:\n'
+    msg = f'{profile["name"]}, {bdate_info["age"]} (&#127380;{profile["id"]})\n'
+    msg += f'{dist} км от тебя\n' if dist else ''
+    if dist == 0:
+        msg += f'0 км от тебя\n'
+    msg += f'{profile["city"]}\n\nЦели:\n'
     purposes = await get_purposes_from_list(profile['purposes'])
     for purpose in purposes:
         msg += f'&#10004;{purpose}\n'
     att = profile['main_photo']
-    return {'msg': msg, 'att': att}
+    contacts = {'cont_vk': profile['cont_vk'], 'cont_tg': profile['cont_tg']}
+    return {'msg': msg, 'att': att, 'contacts': contacts}
 
 
 async def generate_profile_forsettings(vk_id):

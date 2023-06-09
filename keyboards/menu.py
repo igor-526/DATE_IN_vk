@@ -1,8 +1,13 @@
 from vkwave.bots import Keyboard, ButtonColor
+from dbase import count_matches
 
-menu_keys = Keyboard()
-menu_keys.add_text_button(text="Поиск", payload={"command": "start"}, color=ButtonColor.POSITIVE)
-menu_keys.add_text_button(text="Пары (0)", payload={"command": "matches"}, color=ButtonColor.POSITIVE)
-menu_keys.add_row()
-menu_keys.add_text_button(text="Обновить гео", payload={"command": "upd_geo"}, color=ButtonColor.PRIMARY)
-menu_keys.add_text_button(text="Профиль", payload={"command": "profile"}, color=ButtonColor.SECONDARY)
+
+async def menu_keys(pr_id):
+    match_count = await count_matches(pr_id)
+    keys = Keyboard()
+    keys.add_text_button(text="Поиск", payload={"command": "start"}, color=ButtonColor.POSITIVE)
+    keys.add_text_button(text=f"Пары ({match_count})", payload={"command": "matches"}, color=ButtonColor.POSITIVE)
+    keys.add_row()
+    keys.add_text_button(text="Обновить гео", payload={"command": "upd_geo"}, color=ButtonColor.PRIMARY)
+    keys.add_text_button(text="Профиль", payload={"command": "profile"}, color=ButtonColor.SECONDARY)
+    return keys

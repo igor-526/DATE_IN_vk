@@ -26,11 +26,13 @@ from handlers import (reg_profile_router,
                       prs_sex_f_router,
                       prs_deactivate_router,
                       reg_tg_id_router,
-                      search_engine_router)
+                      search_engine_router,
+                      match_engine_router)
 
 bot.dispatcher.add_router(menu_router)
 bot.dispatcher.add_router(commands_router)
 bot.dispatcher.add_router(search_engine_router)
+bot.dispatcher.add_router(match_engine_router)
 bot.dispatcher.add_router(profile_router)
 bot.dispatcher.add_router(prs_name_router)
 bot.dispatcher.add_router(prs_bdate_router)
