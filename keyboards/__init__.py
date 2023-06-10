@@ -4,7 +4,7 @@ from keyboards.sex_to_f import sexf_keys
 from keyboards.sex import sex_keys
 from keyboards.skip import skip_keys
 from keyboards.menu import menu_keys
-from keyboards.profile_settings import prof_set_keys
+from keyboards.profile_settings import *
 from keyboards.yesnoback import yesnoback_keys
 from keyboards.back import back_keys
 from keyboards.geo import geo_keys

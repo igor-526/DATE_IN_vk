@@ -1,8 +1,8 @@
 from vkwave.bots import Keyboard, ButtonColor
 
 search_keys = Keyboard()
-search_keys.add_text_button(text="&#10084;", payload={"command": "like"}, color=ButtonColor.SECONDARY)
 search_keys.add_text_button(text="&#10060;", payload={"command": "pass"}, color=ButtonColor.SECONDARY)
+search_keys.add_text_button(text="&#10084;", payload={"command": "like"}, color=ButtonColor.SECONDARY)
 search_keys.add_row()
 search_keys.add_text_button(text="Меню", payload={"command": "menu"}, color=ButtonColor.PRIMARY)
 

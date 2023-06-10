@@ -27,7 +27,14 @@ from handlers import (reg_profile_router,
                       prs_deactivate_router,
                       reg_tg_id_router,
                       search_engine_router,
-                      match_engine_router)
+                      match_engine_router,
+                      prmd_height_router,
+                      prmd_hobby_router,
+                      prmd_habits_router,
+                      prmd_animals_router,
+                      prmd_children_router,
+                      prmd_busy_router,
+                      prs_km_f_router)
 
 bot.dispatcher.add_router(menu_router)
 bot.dispatcher.add_router(commands_router)
@@ -43,7 +50,14 @@ bot.dispatcher.add_router(prs_description_router)
 bot.dispatcher.add_router(prs_photos_router)
 bot.dispatcher.add_router(prs_age_f_router)
 bot.dispatcher.add_router(prs_sex_f_router)
+bot.dispatcher.add_router(prs_km_f_router)
 bot.dispatcher.add_router(prs_deactivate_router)
+bot.dispatcher.add_router(prmd_height_router)
+bot.dispatcher.add_router(prmd_hobby_router)
+bot.dispatcher.add_router(prmd_habits_router)
+bot.dispatcher.add_router(prmd_animals_router)
+bot.dispatcher.add_router(prmd_children_router)
+bot.dispatcher.add_router(prmd_busy_router)
 bot.dispatcher.add_router(reg_profile_router)
 bot.dispatcher.add_router(reg_name_router)
 bot.dispatcher.add_router(reg_bdate_router)

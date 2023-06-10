@@ -24,8 +24,8 @@ async def get_prof_forview(pr_id):
     return result
 
 
-async def get_prof_forsetting(vk_id):
-    profile = await Profile.query.where(Profile.vk_id == vk_id).gino.first()
+async def get_prof_forsetting(pr_id):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
     settings = await Settings.query.where(Settings.profile_id == profile.id).gino.first()
     photos = await Images.query.where(Images.profile_id == profile.id).where(Images.description == 'profile_photo').gino.all()
     counter = 0
@@ -51,7 +51,9 @@ async def get_prof_forsetting(vk_id):
     result = {'id': profile.id, 'name': profile.name, 'city': profile.city, 'bdate': profile.bdate,
               'description': profile.description, 'main_photo': main_photo, 'other_photos': images,
               'purposes': purposes, 'sex': profile.sex, 'age_min': settings.age_min, 'age_max': settings.age_max,
-              'find_m': settings.find_m, 'find_f': settings.find_f}
+              'find_m': settings.find_m, 'find_f': settings.find_f, 'height': profile.height, 'habits': profile.habits,
+              'children': profile.children, 'busy': profile.busy, 'hobby': profile.hobby, 'animals': profile.animals,
+              'dist': settings.km_limit}
     return result
 
 

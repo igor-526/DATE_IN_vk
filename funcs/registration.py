@@ -12,6 +12,7 @@ from keyboards import (yesnoback_keys,
 from vkwave.bots.fsm import ForWhat
 from funcs import gen_purposes
 from funcs.send_menu import show_menu
+from funcs.profile_settings import f_ch_d
 from dbase import add_profile, add_settings, add_profile_photos
 import datetime
 from aiogram import Bot
@@ -162,6 +163,7 @@ async def f_reg_finish(event: SimpleBotEvent):
                                    bdate=datetime.datetime.strptime(data['bdate'], '%d.%m.%Y'), sex=data['sex'],
                                    city=data['city'], description=data['description'], geo_lat=data['geo']['latitude'],
                                    geo_long=data['geo']['longitude'])
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
     f_m = f_f = p1 = p2 = p3 = p4 = p5 = 0
     if 1 in data['sex_f']:
         f_f = 1
@@ -180,9 +182,8 @@ async def f_reg_finish(event: SimpleBotEvent):
     await add_settings(pr_id, age_min=data['age_min'], age_max=data['age_max'], purp1=p1, purp2=p2,
                        purp3=p3, purp4=p4, purp5=p5, find_f=f_f, find_m=f_m)
     await add_profile_photos(pr_id, photos=data['photos'])
-    await event.answer(message="Ура! Всё получилось!\n"
-                               "Ты также можешь добавить следующие данные о себе:")
-    await show_menu(event)
+    await event.answer(message="Ура! Всё получилось!\n")
+    await f_ch_d(event)
 
 
 async def send_code(event: SimpleBotEvent, tg_id):

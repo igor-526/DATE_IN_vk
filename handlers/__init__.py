@@ -25,3 +25,10 @@ from handlers.profile_settings.prs_deactivate import prs_deactivate_router
 from handlers.reg.reg_tg_id import reg_tg_id_router
 from handlers.search_engine import search_engine_router
 from handlers.match_engine import match_engine_router
+from handlers.profile_settings.prmd_height import prmd_height_router
+from handlers.profile_settings.prmd_hobby import prmd_hobby_router
+from handlers.profile_settings.prmd_habits import prmd_habits_router
+from handlers.profile_settings.prmd_animals import prmd_animals_router
+from handlers.profile_settings.prmd_children import prmd_children_router
+from handlers.profile_settings.prmd_busy import prmd_busy_router
+from handlers.profile_settings.prs_km_f import prs_km_f_router

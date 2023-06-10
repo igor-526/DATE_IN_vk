@@ -40,8 +40,16 @@ class Profile:
     age_min = State('age_min')
     age_max = State('age_max')
     sex_f = State('sex_f')
+    km_f = State('km_f')
     delete = State('delete')
     desc_more = State('desc_more')
+    d_m_height = State('d_m_height')
+    d_m_habits = State('d_m_habits')
+    d_m_hobby = State('d_m_hobby')
+    d_m_children = State('d_m_children')
+    d_m_animals = State('d_m_animals')
+    d_m_busy = State('d_m_busy')
+    filters = State('filters')
 
 
 class Search:

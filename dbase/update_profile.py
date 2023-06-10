@@ -111,3 +111,38 @@ async def upd_delete_profile(vk_id):
         await photo.delete()
     await settings.delete()
     await profile.delete()
+
+
+async def upd_d_height(pr_id, height=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(height=height).apply()
+
+
+async def upd_d_habits(pr_id, habits=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(habits=habits).apply()
+
+
+async def upd_d_children(pr_id, children=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(children=children).apply()
+
+
+async def upd_d_busy(pr_id, busy=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(busy=busy).apply()
+
+
+async def upd_d_hobby(pr_id, hobby=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(hobby=hobby).apply()
+
+
+async def upd_d_animals(pr_id, animals=None):
+    profile = await Profile.query.where(Profile.id == pr_id).gino.first()
+    await profile.update(animals=animals).apply()
+
+
+async def upd_dist(prof_id, dist):
+    settings = await Settings.query.where(Settings.profile_id == prof_id).gino.first()
+    await settings.update(km_limit=dist).apply()

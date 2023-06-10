@@ -72,7 +72,9 @@ async def upd_geo(event: SimpleBotEvent):
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "profile"}),
                             StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
 async def profile(event: SimpleBotEvent):
-    prof = await generate_profile_forsettings(event.user_id)
+    pr_id = await get_profile_id(event.user_id)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
+    prof = await generate_profile_forsettings(pr_id)
     await event.answer(message=prof['msg1'],
                        attachment=prof['att1'],
                        keyboard=prof_set_keys.get_keyboard())
