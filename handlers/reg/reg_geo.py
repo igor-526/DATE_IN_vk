@@ -3,7 +3,7 @@ from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Reg
 from keyboards import geo_keys
-from funcs import invalid, f_reg_bdate
+from funcs import invalid, f_reg_bdate, f_reg_photo
 
 reg_geo_router = DefaultRouter()
 
