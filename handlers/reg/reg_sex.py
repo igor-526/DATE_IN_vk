@@ -31,4 +31,4 @@ async def back(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_sex_router,
                             StateFilter(fsm=fsm, state=Reg.sex_manual, for_what=ForWhat.FOR_USER))
 async def do_raise(event: SimpleBotEvent):
-    await invalid(event, keys=sex_keys.get_keyboard())
+    await invalid(event, keys=sex_keys)

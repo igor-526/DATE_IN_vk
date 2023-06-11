@@ -15,8 +15,8 @@ async def get_photos_info(message_id):
     for photo in photos:
         owner_id = photo['photo']['owner_id']
         photo_id = photo['photo']['id']
-        access_key = photo['photo']['access_key']
-        vk_url = f'photo{owner_id}_{photo_id}_{access_key}'
+        access_key = photo['photo'].get('access_key')
+        vk_url = f'photo{owner_id}_{photo_id}_{access_key}' if access_key else f'photo{owner_id}_{photo_id}'
         url = photo['photo']['sizes'][-1]['url']
         result.append({'vk_url': vk_url, 'url': url})
     return result

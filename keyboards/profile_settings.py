@@ -67,3 +67,8 @@ busy_keys.add_callback_button(text='учусь/работаю', payload={'comman
 busy_keys.add_row()
 busy_keys.add_callback_button(text='Назад', payload={'command': 'back'})
 busy_keys.add_callback_button(text='Очистить', payload={'command': 'clean'})
+
+
+proftg_keys = Keyboard(inline=True)
+proftg_keys.add_callback_button(text='фото', payload={'command': 'get_photo'})
+proftg_keys.add_callback_button(text='Описание', payload={'command': 'get_description'})

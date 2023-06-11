@@ -27,7 +27,8 @@ async def get_prof_forview(pr_id):
 async def get_prof_forsetting(pr_id):
     profile = await Profile.query.where(Profile.id == pr_id).gino.first()
     settings = await Settings.query.where(Settings.profile_id == profile.id).gino.first()
-    photos = await Images.query.where(Images.profile_id == profile.id).where(Images.description == 'profile_photo').gino.all()
+    photos = await Images.query.where(Images.profile_id == profile.id).where(
+        Images.description == 'profile_photo').order_by('id').gino.all()
     counter = 0
     images = []
     main_photo = None

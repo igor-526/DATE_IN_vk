@@ -39,8 +39,7 @@ async def upd_purposes(vk_id,
     await settings.update(purp1=purp1, purp2=purp2, purp3=purp3, purp4=purp4, purp5=purp5).apply()
 
 
-async def upd_geo(vk_id, geo):
-    prof_id = await get_profile_id(vk_id)
+async def upd_geo(prof_id, geo):
     profile = await Profile.query.where(Profile.id == prof_id).gino.first()
     await profile.update(city=geo.place.city, geo_lat=geo.coordinates.latitude,
                          geo_long=geo.coordinates.longitude).apply()

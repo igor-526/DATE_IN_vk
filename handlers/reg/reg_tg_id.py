@@ -2,7 +2,7 @@ from vkwave.bots.fsm import StateFilter, NO_STATE, ForWhat
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Reg
-from keyboards import back_keys, yesno_keys
+from keyboards import back_keys, yesno_keys, proftg_keys
 from funcs import start_registration, generate_profile_forview, show_menu, send_code, invalid
 from dbase import chk_reg_tg, add_vk_id
 
@@ -25,17 +25,16 @@ async def validate(event: SimpleBotEvent):
         if not prof.tg_id:
             raise
         tg_id = prof.tg_id
-        mess = await generate_profile_forview(prof.id, 0)
-        await event.answer(message=mess['msg1'],
-                           attachment=mess['att1'])
-        if mess['msg2'] or mess['att2']:
-            await event.answer(message=mess['msg2'],
-                               attachment=mess['att2'])
+        prof = await generate_profile_forview(prof.id, 0)
+        await event.answer(message=prof['msg'],
+                           attachment=prof['att'],
+                           keyboard=proftg_keys.get_keyboard())
         await event.answer(message='Это твой профиль?',
                            keyboard=yesno_keys.get_keyboard())
         await fsm.set_state(state=Reg.tg_confirm, event=event, for_what=ForWhat.FOR_USER)
         await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'tg_id': tg_id})
-    except:
+    except Exception as exx:
+        print(exx)
         await event.answer(message="Не нашёл профиля с таким id\n"
                                    "Убедись, что вводишь id профиля DATE IN, а не чего-либо другого!",
                            keyboard=back_keys.get_keyboard())

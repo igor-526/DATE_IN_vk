@@ -33,7 +33,7 @@ async def manual(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_name_router,
                             StateFilter(fsm=fsm, state=Reg.name_auto, for_what=ForWhat.FOR_USER))
 async def name_invalid(event: SimpleBotEvent):
-    await invalid(event, yesnoback_keys.get_keyboard())
+    await invalid(event, yesnoback_keys)
 
 
 @simple_bot_message_handler(reg_name_router, filters.PayloadFilter({"command": "back"}),

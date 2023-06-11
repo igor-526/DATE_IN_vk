@@ -42,10 +42,10 @@ async def telegram(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_profile_router, filters.PayloadFilter({"command": "site"}),
                             StateFilter(fsm=fsm, state=Reg.profile, for_what=ForWhat.FOR_USER))
 async def telegram(event: SimpleBotEvent):
-    await invalid(event, reg_profile_keys.get_keyboard())
+    await invalid(event, reg_profile_keys)
 
 
 @simple_bot_message_handler(reg_profile_router,
                             StateFilter(fsm=fsm, state=Reg.profile, for_what=ForWhat.FOR_USER))
 async def f_invalid(event: SimpleBotEvent):
-    await invalid(event, reg_profile_keys.get_keyboard())
+    await invalid(event, reg_profile_keys)

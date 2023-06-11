@@ -66,7 +66,10 @@ async def start_search(event: SimpleBotEvent):
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "upd_geo"}),
                             StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
 async def upd_geo(event: SimpleBotEvent):
+    pr_id = await get_profile_id(event.user_id)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
     await f_ch_geo(event)
+    await fsm.set_state(state=Menu.geo, event=event, for_what=ForWhat.FOR_USER)
 
 
 @simple_bot_message_handler(menu_router, filters.PayloadFilter({"command": "profile"}),

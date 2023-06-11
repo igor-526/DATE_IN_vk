@@ -38,4 +38,4 @@ async def maleandfemale(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_sexf_router,
                             StateFilter(fsm=fsm, state=Reg.f_sex, for_what=ForWhat.FOR_USER))
 async def do_raise(event: SimpleBotEvent):
-    await invalid(event, sexf_keys.get_keyboard())
+    await invalid(event, sexf_keys)

@@ -33,7 +33,7 @@ async def backto_name(event: SimpleBotEvent):
 @simple_bot_message_handler(reg_bdate_router,
                             StateFilter(fsm=fsm, state=Reg.bdate_auto, for_what=ForWhat.FOR_USER))
 async def do_raise(event: SimpleBotEvent):
-    await invalid(event, keys=yesnoback_keys.get_keyboard())
+    await invalid(event, keys=yesnoback_keys)
 
 
 @simple_bot_message_handler(reg_bdate_router, filters.PayloadFilter({"command": "back"}),
