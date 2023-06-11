@@ -10,6 +10,6 @@ bot = SimpleCallbackBot(
     path="",
     port=3001,
     tokens=config.bot_token,
-    confirmation_key="f05fe273",
+    confirmation_key="c7d00990",
     secret="zhrVWfxtL1jBCR2qUezC",
 )
