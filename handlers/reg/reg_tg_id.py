@@ -1,4 +1,4 @@
-from vkwave.bots.fsm import StateFilter, NO_STATE, ForWhat
+from vkwave.bots.fsm import StateFilter, ForWhat
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Reg
@@ -37,6 +37,7 @@ async def validate(event: SimpleBotEvent):
         print(exx)
         await event.answer(message="Не нашёл профиля с таким id\n"
                                    "Убедись, что вводишь id профиля DATE IN, а не чего-либо другого!",
+                           attachment='photo28964076_457273215_7115326e569d07ed93',
                            keyboard=back_keys.get_keyboard())
 
 

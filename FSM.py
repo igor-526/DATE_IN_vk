@@ -26,6 +26,7 @@ class Reg:
 class Menu:
     menu = State('menu')
     geo = State('geo')
+    report = State('report')
 
 
 class Profile:

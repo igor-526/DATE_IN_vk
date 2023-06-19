@@ -15,3 +15,4 @@ from keyboards.return_profile import return_keys
 from keyboards.code import code_keys
 from keyboards.search import search_keys, searchin_keys
 from keyboards.match import *
+from keyboards.complaints import complaint_keys

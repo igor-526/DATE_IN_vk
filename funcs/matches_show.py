@@ -44,7 +44,7 @@ async def next_old_match(event: SimpleBotEvent):
 async def prev_old_match(event: SimpleBotEvent):
     try:
         data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
-        cursor = data['old_matches']['cursor'] + 1
+        cursor = data['old_matches']['cursor'] - 1
         matches = data['old_matches']['matches']
         await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={
             'old_matches': {'matches': matches, 'cursor': cursor}})

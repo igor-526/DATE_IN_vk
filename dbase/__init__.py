@@ -6,3 +6,4 @@ from dbase.datesinfo import dates_info
 from dbase.update_profile import *
 from dbase.offers import *
 from dbase.matches import *
+from dbase.complaints import send_complaint

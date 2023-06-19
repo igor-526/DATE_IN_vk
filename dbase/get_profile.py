@@ -60,7 +60,7 @@ async def get_prof_forsetting(pr_id):
 
 async def get_photos(pr_id):
     photos = await Images.query.where(Images.profile_id == pr_id).where(
-        Images.description == 'profile_photo').gino.all()
+        Images.description == 'profile_photo').order_by('id').gino.all()
     result = []
     for photo in photos:
         result.append(photo.url_vk)

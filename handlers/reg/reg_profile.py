@@ -35,6 +35,7 @@ async def no_profile(event: SimpleBotEvent):
 async def telegram(event: SimpleBotEvent):
     await event.answer(message="Пожалуйста, напиши мне id своего профиля\n"
                                "Узнать его можно в настройках профиля",
+                       attachment='photo28964076_457273215_7115326e569d07ed93',
                        keyboard=back_keys.get_keyboard())
     await fsm.set_state(state=Reg.tg_id, event=event, for_what=ForWhat.FOR_USER)
 

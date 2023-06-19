@@ -4,7 +4,13 @@ from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handle
 from FSM import fsm, Menu, Profile, Search
 from keyboards import reg_keys, prof_set_keys, return_keys, search_keys, newmatch_keys
 from dbase import chk_reg, dates_info, upd_activate_profile, upd_delete_profile, get_profile_id
-from funcs import start_registration, show_menu, generate_profile_forsettings, f_ch_geo, search, show_new_match
+from funcs import (start_registration,
+                   show_menu,
+                   generate_profile_forsettings,
+                   f_ch_geo,
+                   search,
+                   show_new_match,
+                   menu_invalid)
 import datetime
 import pytz
 
@@ -94,3 +100,9 @@ async def matches(event: SimpleBotEvent):
     await event.answer(message="Секунду..",
                        keyboard=newmatch_keys.get_keyboard())
     await show_new_match(event)
+
+
+@simple_bot_message_handler(menu_router,
+                            StateFilter(fsm=fsm, state=Menu.menu, for_what=ForWhat.FOR_USER))
+async def invalid(event: SimpleBotEvent):
+    await menu_invalid(event)

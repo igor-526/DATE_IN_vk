@@ -29,8 +29,11 @@ async def valid(event: SimpleBotEvent):
         await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'description': event.text})
         await f_reg_purposes(event)
     elif validator == 'obscene':
-        return "Мы против нецензурной лексики\n" \
-               "Попробуй переписать так, чтобы её там не было"
+        await event.answer(message="Мы против нецензурной лексики\n"
+                                   "фильтр мог сработать ошибочно, пока что оставим так, но твоё описание бует "
+                                   "отправлено на модерацию")
+        await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'description': event.text})
+        await f_reg_purposes(event)
     elif validator == 'long':
         return "Слишком длинное описание\n" \
                "К сожалению, это не наше ограничение, а мессенджеров"

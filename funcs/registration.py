@@ -11,7 +11,6 @@ from keyboards import (yesnoback_keys,
                        code_keys)
 from vkwave.bots.fsm import ForWhat
 from funcs import gen_purposes
-from funcs.send_menu import show_menu
 from funcs.profile_settings import f_ch_d
 from dbase import add_profile, add_settings, add_profile_photos
 import datetime
@@ -29,7 +28,9 @@ async def invalid(event: SimpleBotEvent, keys):
 async def start_registration(event: SimpleBotEvent):
     await event.answer(message="\U00002757 ВНИМАНИЕ \U00002757 \n"
                                "Продолжая регистрацию, ты даёшь своё согласие на обработку персональных данных\n"
-                               "Ознакомиться с ней можно здесь datein.ru/privacy")
+                               "Ознакомиться с ней можно здесь datein.ru/privacy\n"
+                               "При возникновении какой-нибудь трудной ситуации, оставь пожалуйста свой репорт о "
+                               "работе бота, используя команду /report. Ты можешь помочь нам стать лучше!")
     await event.answer(message="Подскажи, ты используешь DATE IN в Telegram?",
                        keyboard=reg_profile_keys.get_keyboard())
     await fsm.set_state(event=event, state=Reg.profile, for_what=ForWhat.FOR_USER)
@@ -182,7 +183,13 @@ async def f_reg_finish(event: SimpleBotEvent):
     await add_settings(pr_id, age_min=data['age_min'], age_max=data['age_max'], purp1=p1, purp2=p2,
                        purp3=p3, purp4=p4, purp5=p5, find_f=f_f, find_m=f_m)
     await add_profile_photos(pr_id, photos=data['photos'])
-    await event.answer(message="Ура! Всё получилось!\n")
+    await event.answer(message="Ура! Всё получилось!\n"
+                               "Эти команды тебе смогут помочь в дальнейшем:\n"
+                               "/help - помощь\n"
+                               "/rules - правила использования сервиса\n"
+                               "/menu - выйти в главное меню\n"
+                               "/reset - перезагрузить бота\n"
+                               "/report - оставить репорт о работе бота")
     await f_ch_d(event)
 
 

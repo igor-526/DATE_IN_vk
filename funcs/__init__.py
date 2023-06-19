@@ -5,3 +5,4 @@ from funcs.send_menu import *
 from funcs.profile_settings import *
 from funcs.searching import *
 from funcs.matches_show import *
+from funcs.complaint import *
