@@ -4,7 +4,7 @@ from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handle
 from random import randint
 from FSM import fsm, Search
 from keyboards import search_keys
-from funcs import search, show_menu, invalid, generate_profile_description
+from funcs import search, show_menu, invalid, generate_profile_description, comp_ask_cat
 from dbase import profile_like, profile_pass, get_photos
 from vkapi.getidfrommessage import get_id_from_message
 
@@ -67,13 +67,14 @@ async def description(event: SimpleBotEvent):
                     filters.PayloadFilter({'command': 'complaint'}),
                     StateFilter(fsm=fsm, state=Search.searching, for_what=ForWhat.FOR_USER))
 async def complaint(event: SimpleBotEvent):
-    await event.callback_answer(event_data=CallbackAnswer.show_snackbar(text="Пока не работает"))
+    to_id = await get_id_from_message(event.object.object.conversation_message_id, event.peer_id)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'compl_to': to_id, 'back_to': 'search'})
+    await comp_ask_cat(event)
 
 
 @simple_bot_message_handler(search_engine_router,
                             StateFilter(fsm=fsm, state=Search.searching, for_what=ForWhat.FOR_USER))
 async def invalid_profile(event: SimpleBotEvent):
-    print(event)
     await invalid(event, search_keys)
 
 

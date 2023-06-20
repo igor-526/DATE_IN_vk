@@ -12,20 +12,17 @@ from random import randint
 async def comp_ask_cat(event: SimpleBotEvent):
     await event.api_ctx.messages.send(user_id=event.user_id,
                                       random_id=randint(-2147483648, 2147483647),
-                                      message="Вы собираетесь оформить жалобу на профиль",
-                                      keyboard=cancel_keys.get_keyboard())
-    await event.api_ctx.messages.send(user_id=event.user_id,
-                                      random_id=randint(-2147483648, 2147483647),
-                                      message="Выберите категорию жалобы:",
+                                      message="Вы собираетесь оформить жалобу на профиль\n"
+                                              "Выберите категорию жалобы:",
                                       keyboard=complaint_keys.get_keyboard())
-    await fsm.set_state(state=Complaints, event=event, for_what=ForWhat.FOR_USER)
+    await fsm.set_state(state=Complaints.category, event=event, for_what=ForWhat.FOR_USER)
 
 
 async def comp_ask_desc(event: SimpleBotEvent):
     await event.api_ctx.messages.send(user_id=event.user_id,
                                       random_id=randint(-2147483648, 2147483647),
                                       message="Опиши, пожалуйста, что произошло. Можно приложить фотографии",
-                                      keyboard=complaint_keys.get_keyboard())
+                                      keyboard=cancel_keys.get_keyboard())
     await fsm.set_state(state=Complaints.description, event=event, for_what=ForWhat.FOR_USER)
 
 
@@ -51,5 +48,5 @@ async def comp_send(event: SimpleBotEvent):
                          images=data['comp_media'])
     await event.answer(message='Жалоба успешно отправлена',
                        keyboard=search_keys.get_keyboard())
-    await fsm.finish()
+    await fsm.finish(event=event, for_what=ForWhat.FOR_USER)
     await search(event)

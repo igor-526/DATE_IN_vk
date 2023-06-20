@@ -1,4 +1,5 @@
 from vkwave.bots.fsm import StateFilter, ForWhat, ANY_STATE
+from vkwave.bots import Keyboard
 from vkwave.bots.core.dispatching import filters
 from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handler
 from FSM import fsm, Menu
@@ -30,8 +31,9 @@ async def rules(event: SimpleBotEvent):
 @simple_bot_message_handler(commands_router, filters.CommandsFilter('reset'),
                             StateFilter(fsm=fsm, state=ANY_STATE, for_what=ForWhat.FOR_USER))
 async def reset(event: SimpleBotEvent):
-    await fsm.finish()
-    await event.answer("Успешно. Напишите что-нибудь")
+    await fsm.finish(event=event, for_what=ForWhat.FOR_USER)
+    await event.answer("Успешно. Напишите что-нибудь",
+                       keyboard=Keyboard.get_empty_keyboard())
 
 
 @simple_bot_message_handler(commands_router, filters.CommandsFilter('menu'),

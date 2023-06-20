@@ -32,3 +32,5 @@ from handlers.profile_settings.prmd_animals import prmd_animals_router
 from handlers.profile_settings.prmd_children import prmd_children_router
 from handlers.profile_settings.prmd_busy import prmd_busy_router
 from handlers.profile_settings.prs_km_f import prs_km_f_router
+from handlers.complaints.category import comp_cat_router
+from handlers.complaints.description import comp_desc_router

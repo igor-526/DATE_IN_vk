@@ -1,26 +1,30 @@
 from vkwave.bots import Keyboard, ButtonColor
 
-searchin_keys = Keyboard(inline=True)
-searchin_keys.add_callback_button(text='фото', payload={'command': 'get_photo'})
-searchin_keys.add_callback_button(text='Описание', payload={'command': 'get_description'})
-searchin_keys.add_row()
-searchin_keys.add_callback_button(text='Пожаловаться', payload={'command': 'complaint'})
 
-complaint_keys = Keyboard(inline=True)
-complaint_keys.add_callback_button(text='', payload={'command': ''})
+complaint_keys = Keyboard()
+complaint_keys.add_text_button(text='Отмена', payload={'command': 'cancel'},
+                               color=ButtonColor.NEGATIVE)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Фейковый профиль/данные', payload={'command': 'fake'})
+complaint_keys.add_text_button(text='Фейковый профиль/данные', payload={'command': 'fake'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Откровенный контент', payload={'command': 'sex_content'})
+complaint_keys.add_text_button(text='Откровенный контент', payload={'command': 'sex_content'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Коммерческая деятельность', payload={'command': 'commercial'})
+complaint_keys.add_text_button(text='Коммерческая деятельность', payload={'command': 'commercial'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Мошенничество', payload={'command': 'faking'})
+complaint_keys.add_text_button(text='Мошенничество', payload={'command': 'faking'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Призывы к незаконным действиям', payload={'command': 'illegal'})
+complaint_keys.add_text_button(text='Призывы к незаконным действиям', payload={'command': 'illegal'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Неадекватное поведение/оскорбление', payload={'command': 'abuse'})
+complaint_keys.add_text_button(text='Неадекватное поведение/оскорбление', payload={'command': 'abuse'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Младще 14 лет', payload={'command': 'age'})
+complaint_keys.add_text_button(text='Младше 14 лет', payload={'command': 'age'},
+                               color=ButtonColor.SECONDARY)
 complaint_keys.add_row()
-complaint_keys.add_callback_button(text='Другое', payload={'command': 'other'})
+complaint_keys.add_text_button(text='Другое', payload={'command': 'other'},
+                               color=ButtonColor.SECONDARY)

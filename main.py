@@ -34,12 +34,16 @@ from handlers import (reg_profile_router,
                       prmd_animals_router,
                       prmd_children_router,
                       prmd_busy_router,
-                      prs_km_f_router)
+                      prs_km_f_router,
+                      comp_cat_router,
+                      comp_desc_router)
 
 bot.dispatcher.add_router(menu_router)
 bot.dispatcher.add_router(commands_router)
 bot.dispatcher.add_router(search_engine_router)
 bot.dispatcher.add_router(match_engine_router)
+bot.dispatcher.add_router(comp_cat_router)
+bot.dispatcher.add_router(comp_desc_router)
 bot.dispatcher.add_router(profile_router)
 bot.dispatcher.add_router(prs_name_router)
 bot.dispatcher.add_router(prs_bdate_router)
