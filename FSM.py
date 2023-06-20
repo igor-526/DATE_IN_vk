@@ -27,6 +27,7 @@ class Menu:
     menu = State('menu')
     geo = State('geo')
     report = State('report')
+    report_confirm = State('report_confirm')
 
 
 class Profile:

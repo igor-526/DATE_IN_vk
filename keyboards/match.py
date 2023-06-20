@@ -8,10 +8,10 @@ newmatch_keys.add_text_button(text="Просмотренные", payload={"comma
 
 
 nomatch_keys = Keyboard()
-nomatch_keys.add_text_button(text="Начать поиск", payload={"command": "search"}, color=ButtonColor.SECONDARY)
+nomatch_keys.add_text_button(text="Начать поиск", payload={"command": "search"}, color=ButtonColor.POSITIVE)
 nomatch_keys.add_row()
 nomatch_keys.add_text_button(text="Меню", payload={"command": "menu"}, color=ButtonColor.SECONDARY)
-nomatch_keys.add_text_button(text="Просмотренные", payload={"command": "showed"}, color=ButtonColor.SECONDARY)
+nomatch_keys.add_text_button(text="Просмотренные", payload={"command": "showed"}, color=ButtonColor.PRIMARY)
 
 
 oldmatch_keys = Keyboard()

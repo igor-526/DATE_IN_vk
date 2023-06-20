@@ -5,6 +5,7 @@ from vkwave.bots import SimpleBotEvent, DefaultRouter, simple_bot_message_handle
 from FSM import fsm, Menu
 from dbase import get_profile_id, chk_reg
 from funcs import show_menu
+from keyboards import cancel_keys
 
 commands_router = DefaultRouter()
 
@@ -15,10 +16,9 @@ async def report(event: SimpleBotEvent):
     pr_id = await get_profile_id(event.user_id)
     await event.answer("Напишите своё сообщение (Или несколько сообщений) для администрации\n"
                        "Можно отправить фото (или несколько фото) отделными сообщениями. После чего нажми 'Готово!'",
-                       keyboard=None)
-    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={
-        'comp_media': [], 'comp_description': '', 'pr_id': pr_id})
+                       keyboard=cancel_keys.get_keyboard())
     await fsm.set_state(event=event, for_what=ForWhat.FOR_USER, state=Menu.report)
+    await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={'pr_id': pr_id})
 
 
 @simple_bot_message_handler(commands_router, filters.CommandsFilter('rules'),

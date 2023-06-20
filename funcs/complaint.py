@@ -33,20 +33,19 @@ async def comp_confirm(event: SimpleBotEvent):
     compl_files = len(data['comp_media'])
     compl_desc = data['comp_description']
     msg += f'\n\nЖалоба: {compl_desc}\n+ принято {compl_files} вложения\nОтправить жалобу?'
-    await event.answer(message=prof['msg'],
+    await event.answer(message=msg,
                        attachment=prof['att'],
                        keyboard=yesno_keys.get_keyboard())
-    await Complaints.confirm.set()
+    await fsm.set_state(state=Complaints.confirm, event=event, for_what=ForWhat.FOR_USER)
 
 
 async def comp_send(event: SimpleBotEvent):
     data = await fsm.get_data(event=event, for_what=ForWhat.FOR_USER)
-    await send_complaint(pr_id=data['id'],
+    await send_complaint(pr_id=data['pr_id'],
                          to_id=data['compl_to'],
                          cat=data['comp_cat'],
                          description=data['comp_description'],
                          images=data['comp_media'])
     await event.answer(message='Жалоба успешно отправлена',
                        keyboard=search_keys.get_keyboard())
-    await fsm.finish(event=event, for_what=ForWhat.FOR_USER)
     await search(event)

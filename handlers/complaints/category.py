@@ -18,7 +18,7 @@ async def cancel(event: SimpleBotEvent):
                            keyboard=search_keys.get_keyboard())
     elif data['back_to'] == 'matches':
         await event.answer(message="Жалоба отменена",
-                           keyboard=newmatch_keys)
+                           keyboard=newmatch_keys.get_keyboard())
         await show_new_match(event)
 
 
@@ -26,7 +26,7 @@ async def cancel(event: SimpleBotEvent):
                             StateFilter(fsm=fsm, state=Complaints.category, for_what=ForWhat.FOR_USER))
 async def category(event: SimpleBotEvent):
     await fsm.add_data(event=event, for_what=ForWhat.FOR_USER, state_data={
-            'comp_cat': event.payload['command'], 'comp_media': [], 'comp_description': ''})
+            'comp_cat': event.payload['command']})
     await comp_ask_desc(event)
 
 

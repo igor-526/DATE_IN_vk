@@ -8,8 +8,8 @@ if config.CALLBACK:
         path="",
         port=3001,
         tokens=config.bot_token,
-        confirmation_key="c7d00990",
-        secret="zhrVWfxtL1jBCR2qUezC",
+        confirmation_key=config.confirmation_key,
+        secret=config.secret,
     )
 else:
     bot = SimpleLongPollBot(tokens=config.bot_token, group_id=config.group_id)

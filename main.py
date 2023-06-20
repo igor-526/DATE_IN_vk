@@ -36,14 +36,17 @@ from handlers import (reg_profile_router,
                       prmd_busy_router,
                       prs_km_f_router,
                       comp_cat_router,
-                      comp_desc_router)
+                      comp_desc_router,
+                      comp_confirm_router,
+                      report_router)
 
-bot.dispatcher.add_router(menu_router)
 bot.dispatcher.add_router(commands_router)
+bot.dispatcher.add_router(menu_router)
 bot.dispatcher.add_router(search_engine_router)
 bot.dispatcher.add_router(match_engine_router)
 bot.dispatcher.add_router(comp_cat_router)
 bot.dispatcher.add_router(comp_desc_router)
+bot.dispatcher.add_router(comp_confirm_router)
 bot.dispatcher.add_router(profile_router)
 bot.dispatcher.add_router(prs_name_router)
 bot.dispatcher.add_router(prs_bdate_router)
@@ -74,6 +77,7 @@ bot.dispatcher.add_router(reg_sexf_router)
 bot.dispatcher.add_router(reg_age_min_router)
 bot.dispatcher.add_router(reg_age_max_router)
 bot.dispatcher.add_router(reg_tg_id_router)
+bot.dispatcher.add_router(report_router)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(db_bind())
